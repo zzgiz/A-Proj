@@ -448,6 +448,70 @@ NEXT_SHAPE:
 End Sub
 
 ' -----------------------------------------------------------------
+' 枠線の条件書式セット
+' -----------------------------------------------------------------
+Public Sub 枠線()
+
+    Dim sh As Worksheet
+    Dim rng As Range
+    Dim cnt As Long
+    Dim row As Long
+    Dim col As Long
+    Dim idx As Long
+    
+    Set sh = ActiveWorkbook.ActiveSheet
+
+    Set rng = Selection
+    
+    rng.FormatConditions.Delete
+    
+'    cnt = rng.Columns.Count - 2
+    cnt = 3     ' ループ数とりあえず固定
+    
+    
+    For col = rng.Column To rng.Column + cnt - 1
+    
+        rng.FormatConditions.Add Type:=xlExpression, Formula1:="=" & CnvAdr(rng.row, col) & "<>" & CnvAdr(rng.row + 1, col)
+    
+        idx = rng.FormatConditions.Count
+    
+        With rng.FormatConditions(idx).Borders(xlBottom)
+            .LineStyle = xlContinuous
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        
+        rng.FormatConditions(idx).StopIfTrue = False
+        
+        Set rng = sh.Range(sh.Cells(rng.row, col + 1), sh.Cells(rng.row + rng.Rows.Count - 1, rng.Column + rng.Columns.Count - 1))
+    
+    Next
+    
+    
+    Set rng = Nothing
+    Set sh = Nothing
+
+End Sub
+
+' -----------------------------------------------------------------
+' アドレス変換
+' -----------------------------------------------------------------
+Private Function CnvAdr(row As Long, col As Long) As String
+
+    Dim tmp As String
+
+    ' アドレス変換  R1C1 → A1
+    tmp = Application.ConvertFormula("R" & row & "C" & col, FromReferenceStyle:=xlR1C1, ToReferenceStyle:=xlA1)
+    
+    ' $を列だけにする
+    tmp = Replace(tmp, "$", "")
+    tmp = "$" & tmp
+    
+    CnvAdr = tmp
+
+End Function
+
+' -----------------------------------------------------------------
 ' 初期化
 ' -----------------------------------------------------------------
 Private Function Initial() As Variant
