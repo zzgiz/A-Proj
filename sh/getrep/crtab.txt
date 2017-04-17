@@ -1,2 +1,25 @@
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+
 #Customer data from Reporting
 10 23 * * 7 sh /home/作業ディレクトリ/getrep.sh >> /home/作業ディレクトリ/getrep.log 2>&1
+
+
+
+0  1  2  3  4  5  6  7
+Su Mo Tu We Th Fr St Su
+
+
+
+
+crontab -e   編集
+
+crontab -l   リスト出力
+
