@@ -1,0 +1,2 @@
+#Customer data from Reporting
+10 23 * * 7 sh /home/作業ディレクトリ/getrep.sh >> /home/作業ディレクトリ/getrep.log 2>&1
