@@ -1,71 +1,71 @@
-¡ ƒtƒ@ƒCƒ‹ˆê——AŒŸõ
+â–  ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã€æ¤œç´¢
 
-S3 ŒŸõ
-aws s3 ls [S3ƒpƒX] --recursive --human-readable | grep -iE 'SearchWord' > result.txt
+S3 æ¤œç´¢
+aws s3 ls [S3ãƒ‘ã‚¹] --recursive --human-readable | grep -iE 'SearchWord' > result.txt
 
--i ‘å•¶Žš¬•¶Žš‹æ•Ê‚µ‚È‚¢
--E ³‹K•\Œ»
+-i å¤§æ–‡å­—å°æ–‡å­—åŒºåˆ¥ã—ãªã„
+-E æ­£è¦è¡¨ç¾
 
-S3 ƒŠƒXƒgì¬
-aws s3 ls [S3ƒpƒX] --recursive --human-readable --summarize > result.txt
+S3 ãƒªã‚¹ãƒˆä½œæˆ
+aws s3 ls [S3ãƒ‘ã‚¹] --recursive --human-readable --summarize > result.txt
 
---summarize  ‘S‘ÌƒTƒ}ƒŠ•\Ž¦
+--summarize  å…¨ä½“ã‚µãƒžãƒªè¡¨ç¤º
 
 
-EC2 ŒŸõ
+EC2 æ¤œç´¢
 find ./home/user1 -type f -iregex ".*SearchWord.*" | xargs ls -l --time-style=+%Y-%m-%d\ %H:%M:%S > result.txt
 
--iregex  ³‹K•\Œ» ‘å•¶Žš¬•¶Žš‹æ•Ê‚µ‚È‚¢
--regex   ³‹K•\Œ» ‘å•¶Žš¬•¶Žš‹æ•Ê‚ ‚è
+-iregex  æ­£è¦è¡¨ç¾ å¤§æ–‡å­—å°æ–‡å­—åŒºåˆ¥ã—ãªã„
+-regex   æ­£è¦è¡¨ç¾ å¤§æ–‡å­—å°æ–‡å­—åŒºåˆ¥ã‚ã‚Š
 
-xargs ŽÀs
-
-
-
-¡ S3‚©‚ç•œ‹Œ
-
-CREATE TABLE ƒXƒL[ƒ}.ƒe[ƒuƒ‹1
-
-TRUNCATE TABLE ƒXƒL[ƒ}.ƒe[ƒuƒ‹1;
-
-COPY ƒXƒL[ƒ}.ƒe[ƒuƒ‹1
-FROM 'S3ƒpƒX/ƒe[ƒuƒ‹ƒf[ƒ^.csv.gz' csv gzip credentials 'aws_access_key_id=XXXX;aws_secret_access_key=XXXX' DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
-
-  ’ˆÓ“_
-    ƒfƒŠƒ~ƒ^          DELIMITER '\t'   DELIMITER ','
-    ƒwƒbƒ_s‚ ‚è      IGNOREHEADER 1
-    “ú•tƒtƒH[ƒ}ƒbƒg  DATEFORMAT 'auto' TIMEFORMAT 'auto'
-    ‰üsƒR[ƒh        \n
-    ƒtƒ@ƒCƒ‹–¼        ‘å•¶ŽšA¬•¶Žš‚ð‹æ•Ê‚·‚é
+xargs å®Ÿè¡Œ
 
 
 
+â–  S3ã‹ã‚‰å¾©æ—§
 
-¡ S3 <-> EC2 ƒRƒs[
+CREATE TABLE ã‚¹ã‚­ãƒ¼ãƒž.ãƒ†ãƒ¼ãƒ–ãƒ«1
 
-S3ƒpƒX‚Ì‘Sƒtƒ@ƒCƒ‹‚ðEC2‚ÉƒRƒs[
-aws s3 cp [S3ƒpƒX]/ . --recursive
+TRUNCATE TABLE ã‚¹ã‚­ãƒ¼ãƒž.ãƒ†ãƒ¼ãƒ–ãƒ«1;
 
-“Á’èƒtƒ@ƒCƒ‹‚ðEC2‚ÉƒRƒs[
-aws s3 cp [S3ƒpƒX]/“Á’èƒtƒ@ƒCƒ‹ .
+COPY ã‚¹ã‚­ãƒ¼ãƒž.ãƒ†ãƒ¼ãƒ–ãƒ«1
+FROM 'S3ãƒ‘ã‚¹/ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ‡ãƒ¼ã‚¿.csv.gz' csv gzip credentials 'aws_access_key_id=XXXX;aws_secret_access_key=XXXX' DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
 
-EC2‚Ìƒtƒ@ƒCƒ‹‚ðS3‚ÉƒRƒs[
-aws s3 cp testfile [S3ƒpƒX]
+  æ³¨æ„ç‚¹
+    ãƒ‡ãƒªãƒŸã‚¿          DELIMITER '\t'   DELIMITER ','
+    ãƒ˜ãƒƒãƒ€è¡Œã‚ã‚Š      IGNOREHEADER 1
+    æ—¥ä»˜ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆ  DATEFORMAT 'auto' TIMEFORMAT 'auto'
+    æ”¹è¡Œã‚³ãƒ¼ãƒ‰        \n
+    ãƒ•ã‚¡ã‚¤ãƒ«å        å¤§æ–‡å­—ã€å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹
 
 
-ƒ[ƒJƒ‹‚©‚çS3‚ÉƒRƒs[
+
+
+â–  S3 <-> EC2 ã‚³ãƒ”ãƒ¼
+
+S3ãƒ‘ã‚¹ã®å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’EC2ã«ã‚³ãƒ”ãƒ¼
+aws s3 cp [S3ãƒ‘ã‚¹]/ . --recursive
+
+ç‰¹å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’EC2ã«ã‚³ãƒ”ãƒ¼
+aws s3 cp [S3ãƒ‘ã‚¹]/ç‰¹å®šãƒ•ã‚¡ã‚¤ãƒ« .
+
+EC2ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’S3ã«ã‚³ãƒ”ãƒ¼
+aws s3 cp testfile [S3ãƒ‘ã‚¹]
+
+
+ãƒ­ãƒ¼ã‚«ãƒ«ã‹ã‚‰S3ã«ã‚³ãƒ”ãƒ¼
 aws s3 cp <LocalPath> <S3Path>
 
-S3‚©‚çƒ[ƒJƒ‹‚ÉƒRƒs[
+S3ã‹ã‚‰ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚³ãƒ”ãƒ¼
 aws s3 cp <S3Path> <LocalPath>
 
-S3‚©‚çS3‚ÉƒRƒs[
+S3ã‹ã‚‰S3ã«ã‚³ãƒ”ãƒ¼
 aws s3 cp <S3Path> <S3Path>
 
 
-¡ SQLŽÀs
+â–  SQLå®Ÿè¡Œ
 
-psql -h ƒzƒXƒg–¼ -U ƒ†[ƒU–¼ -d DB–¼ -p ƒ|[ƒg -f ./test.sql >& test.log&
+psql -h ãƒ›ã‚¹ãƒˆå -U ãƒ¦ãƒ¼ã‚¶å -d DBå -p ãƒãƒ¼ãƒˆ -f ./test.sql >& test.log&
 
 psql -h XXXX.amazonaws.com -U user1 -d db1 -p 1234 -f ./test.sql >& test.log&
 

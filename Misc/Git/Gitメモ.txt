@@ -6,64 +6,64 @@ git push origin feature/tix_3
 ----- pull request
 git checkout develop
 git pull origin develop
-git push --delete origin feature/tix_3         ƒŠƒ‚[ƒgƒuƒ‰ƒ“ƒ`‚Ìíœ (webã‚Åíœ‚Å‚«‚é)
-git branch -d feature/tix_3                    ƒ[ƒJƒ‹ƒuƒ‰ƒ“ƒ`‚Ìíœ
-git remote prune origin --dry-run              ƒ[ƒJƒ‹‚Ìƒuƒ‰ƒ“ƒ`ˆê——ÅV‰» (ŽŽ‚µ)
-git remote prune origin                        ƒ[ƒJƒ‹‚Ìƒuƒ‰ƒ“ƒ`ˆê——ÅV‰»
+git push --delete origin feature/tix_3         ãƒªãƒ¢ãƒ¼ãƒˆãƒ–ãƒ©ãƒ³ãƒã®å‰Šé™¤ (webä¸Šã§å‰Šé™¤ã§ãã‚‹)
+git branch -d feature/tix_3                    ãƒ­ãƒ¼ã‚«ãƒ«ãƒ–ãƒ©ãƒ³ãƒã®å‰Šé™¤
+git remote prune origin --dry-run              ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒ–ãƒ©ãƒ³ãƒä¸€è¦§æœ€æ–°åŒ– (è©¦ã—)
+git remote prune origin                        ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒ–ãƒ©ãƒ³ãƒä¸€è¦§æœ€æ–°åŒ–
 ------------------------------------------------
 
 
-git branch feature/tix_12345     (Œ»Ýdevlopƒuƒ‰ƒ“ƒ`‚Å‚ ‚é‚±‚Æ)
+git branch feature/tix_12345     (ç¾åœ¨devlopãƒ–ãƒ©ãƒ³ãƒã§ã‚ã‚‹ã“ã¨)
 git checkout feature/tix_12345
 
-  ‚à‚µ‚­‚Í«(2‚Â“¯Žž)
+  ã‚‚ã—ãã¯â†“(2ã¤åŒæ™‚)
 
 git checkout -b feature/tix_43921 develop
 
 
-›ƒRƒ~ƒbƒgŽž‚ÌƒƒbƒZ[ƒW
+â—‹ã‚³ãƒŸãƒƒãƒˆæ™‚ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 ---------------------------------------------------------
 [#12345] change for new function
 
-V‹@”\‚Ì‚½‚ß‚ÌC³
+æ–°æ©Ÿèƒ½ã®ãŸã‚ã®ä¿®æ­£
 ---------------------------------------------------------
 
 
 ---------------------------------------------------------
-fix    FƒoƒOC³
-hotfix FƒNƒŠƒeƒBƒJƒ‹‚ÈƒoƒOC³
-add    FV‹Kiƒtƒ@ƒCƒ‹j‹@”\’Ç‰Á
-update F‹@”\C³iƒoƒO‚Å‚Í‚È‚¢j
-change FŽd—l•ÏX
-clean  F®—iƒŠƒtƒ@ƒNƒ^ƒŠƒ“ƒO“™j
-disableF–³Œø‰»iƒRƒƒ“ƒgƒAƒEƒg“™j
-remove Fíœiƒtƒ@ƒCƒ‹j
-upgradeFƒo[ƒWƒ‡ƒ“ƒAƒbƒv
-revert F•ÏXŽæ‚èÁ‚µ
----------------------------------------------------------
-
-
-
-
-› ƒvƒ‹ƒŠƒN
-Eƒ^ƒCƒgƒ‹‚Í“ú–{Œê‚Å—Ç‚¢
-EƒŒƒrƒ…[ƒA‚ð“ü‚ê‚é‚±‚Æ
-
-[#12345] ƒf[ƒ^‚ª•¡”‘I‘ð‚³‚ê‚é
-
----------------------------------------------------------
-## ŠT—v
-
-
-## ŠÖ˜AURL
-
+fix    ï¼šãƒã‚°ä¿®æ­£
+hotfix ï¼šã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ãªãƒã‚°ä¿®æ­£
+add    ï¼šæ–°è¦ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«ï¼‰æ©Ÿèƒ½è¿½åŠ 
+update ï¼šæ©Ÿèƒ½ä¿®æ­£ï¼ˆãƒã‚°ã§ã¯ãªã„ï¼‰
+change ï¼šä»•æ§˜å¤‰æ›´
+clean  ï¼šæ•´ç†ï¼ˆãƒªãƒ•ã‚¡ã‚¯ã‚¿ãƒªãƒ³ã‚°ç­‰ï¼‰
+disableï¼šç„¡åŠ¹åŒ–ï¼ˆã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆç­‰ï¼‰
+remove ï¼šå‰Šé™¤ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«ï¼‰
+upgradeï¼šãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚¢ãƒƒãƒ—
+revert ï¼šå¤‰æ›´å–ã‚Šæ¶ˆã—
 ---------------------------------------------------------
 
 
 
 
+â—‹ ãƒ—ãƒ«ãƒªã‚¯
+ãƒ»ã‚¿ã‚¤ãƒˆãƒ«ã¯æ—¥æœ¬èªžã§è‰¯ã„
+ãƒ»ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚¢ã‚’å…¥ã‚Œã‚‹ã“ã¨
 
-Å‹ß’Ç‰Á‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ðŽæ“¾ ddlƒtƒHƒ‹ƒ_‚©‚ç
+[#12345] ãƒ‡ãƒ¼ã‚¿ãŒè¤‡æ•°é¸æŠžã•ã‚Œã‚‹
+
+---------------------------------------------------------
+## æ¦‚è¦
+
+
+## é–¢é€£URL
+
+---------------------------------------------------------
+
+
+
+
+
+æœ€è¿‘è¿½åŠ ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾— ddlãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰
 git log  --grep 'Revert' --invert-grep --diff-filter=A --format='' --name-only -- ddl
 
 
@@ -75,14 +75,14 @@ git log  --grep 'Revert' --invert-grep --diff-filter=A --format='' --name-only -
 
 ---------------------------------------------------
 
-$ git branch                      # Œ»Ý‚Ìƒuƒ‰ƒ“ƒ`‚ªmaster‚Å‚ ‚é‚±‚Æ‚ðŠm”F‚·‚é
-$ git log --oneline               # ƒRƒ~ƒbƒg‚ÌƒnƒbƒVƒ…’l‚ð’²‚×‚é
+$ git branch                      # ç¾åœ¨ã®ãƒ–ãƒ©ãƒ³ãƒãŒmasterã§ã‚ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
+$ git log --oneline               # ã‚³ãƒŸãƒƒãƒˆã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’èª¿ã¹ã‚‹
 $ git fetch -a -p
-$ password‚Ì“ü—Í
-$ git checkout dev                # devƒuƒ‰ƒ“ƒ`‚ÉˆÚ“®
-$ git merge origin/dev            # devƒuƒ‰ƒ“ƒ`‚ÉƒŠƒ‚[ƒgƒuƒ‰ƒ“ƒ`‚Ì“à—e‚ðƒ}[ƒW(devƒuƒ‰ƒ“ƒ`‚ÌÅV‰»)
-$ git checkout -b dev#ƒ`ƒPƒbƒgNO  # devƒuƒ‰ƒ“ƒ`‚ðƒx[ƒX‚É‚µ‚½ƒgƒsƒbƒNƒuƒ‰ƒ“ƒ`‚Ìì¬
-$ git cherry-pick XXXXXXX         # masterƒuƒ‰ƒ“ƒ`‚ÉƒRƒ~ƒbƒg‚µ‚½‚à‚Ì‚ðƒgƒsƒbƒNƒuƒ‰ƒ“ƒ`‚É‚àƒRƒ~ƒbƒg
+$ passwordã®å…¥åŠ›
+$ git checkout dev                # devãƒ–ãƒ©ãƒ³ãƒã«ç§»å‹•
+$ git merge origin/dev            # devãƒ–ãƒ©ãƒ³ãƒã«ãƒªãƒ¢ãƒ¼ãƒˆãƒ–ãƒ©ãƒ³ãƒã®å†…å®¹ã‚’ãƒžãƒ¼ã‚¸(devãƒ–ãƒ©ãƒ³ãƒã®æœ€æ–°åŒ–)
+$ git checkout -b dev#ãƒã‚±ãƒƒãƒˆNO  # devãƒ–ãƒ©ãƒ³ãƒã‚’ãƒ™ãƒ¼ã‚¹ã«ã—ãŸãƒˆãƒ”ãƒƒã‚¯ãƒ–ãƒ©ãƒ³ãƒã®ä½œæˆ
+$ git cherry-pick XXXXXXX         # masterãƒ–ãƒ©ãƒ³ãƒã«ã‚³ãƒŸãƒƒãƒˆã—ãŸã‚‚ã®ã‚’ãƒˆãƒ”ãƒƒã‚¯ãƒ–ãƒ©ãƒ³ãƒã«ã‚‚ã‚³ãƒŸãƒƒãƒˆ
 
 
 git log --graph
@@ -94,10 +94,10 @@ git log --graph --oneline --decorate=full
 
 
 
-ƒgƒsƒbƒNƒuƒ‰ƒ“ƒ`‚Ì–½–¼‹K‘¥
+ãƒˆãƒ”ãƒƒã‚¯ãƒ–ãƒ©ãƒ³ãƒã®å‘½åè¦å‰‡
 
-feature/tix_<ƒ`ƒPƒbƒg”Ô†>_<C³ŠT—v‚ª‚í‚©‚é–¼Ì>
-‚Æ‚µ‚ÄAgit flow ‚ð“¥P‚µ‚Â‚ÂApull request‚ð—˜—p‚µ‚½‚¢B
+feature/tix_<ãƒã‚±ãƒƒãƒˆç•ªå·>_<ä¿®æ­£æ¦‚è¦ãŒã‚ã‹ã‚‹åç§°>
+ã¨ã—ã¦ã€git flow ã‚’è¸è¥²ã—ã¤ã¤ã€pull requestã‚’åˆ©ç”¨ã—ãŸã„ã€‚
 
 http://qiita.com/mint__/items/bfc58589b5b1e0a1856a
 
@@ -105,108 +105,108 @@ http://qiita.com/mint__/items/bfc58589b5b1e0a1856a
 
 
 
-git flow‚Å‚ÌŠJ”­‚Ì—¬‚ê
+git flowã§ã®é–‹ç™ºã®æµã‚Œ
 
-‡@developƒuƒ‰ƒ“ƒ`‚©‚çfeatureƒuƒ‰ƒ“ƒ`‚ðØ‚Á‚ÄAŠJ”­
-(‡A‘¼‚Ìl‚ªŠJ”­‚µ‚½‚çŽ©•ª‚Ìfeatureƒuƒ‰ƒ“ƒ`‚Éƒ}[ƒW)
-‡BŠJ”­‚ªI‚í‚Á‚½‚çfeatureƒuƒ‰ƒ“ƒ`‚ðdevelop‚Éƒ}[ƒW‚µ‚ÄAfeatureƒuƒ‰ƒ“ƒ`‚ðíœ
-‡Cdevelopƒuƒ‰ƒ“ƒ`‚ðremote‚Épush
+â‘ developãƒ–ãƒ©ãƒ³ãƒã‹ã‚‰featureãƒ–ãƒ©ãƒ³ãƒã‚’åˆ‡ã£ã¦ã€é–‹ç™º
+(â‘¡ä»–ã®äººãŒé–‹ç™ºã—ãŸã‚‰è‡ªåˆ†ã®featureãƒ–ãƒ©ãƒ³ãƒã«ãƒžãƒ¼ã‚¸)
+â‘¢é–‹ç™ºãŒçµ‚ã‚ã£ãŸã‚‰featureãƒ–ãƒ©ãƒ³ãƒã‚’developã«ãƒžãƒ¼ã‚¸ã—ã¦ã€featureãƒ–ãƒ©ãƒ³ãƒã‚’å‰Šé™¤
+â‘£developãƒ–ãƒ©ãƒ³ãƒã‚’remoteã«push
 
-‡@`‡C‚ðŒJ‚è•Ô‚µ‚ÄŠJ”­‚ði‚ß‚é
+â‘ ï½žâ‘£ã‚’ç¹°ã‚Šè¿”ã—ã¦é–‹ç™ºã‚’é€²ã‚ã‚‹
 
-‡DŠJ”­‚ªI—¹‚µ‚½‚çdevelopƒuƒ‰ƒ“ƒ`‚©‚çreleaseƒuƒ‰ƒ“ƒ`‚ðØ‚Á‚ÄƒŠƒŠ[ƒX€”õ
-‡Ereleaseƒuƒ‰ƒ“ƒ`‚Ì•ÒWŠ®—¹ŒãAdevelopƒuƒ‰ƒ“ƒ`‚Æmasterƒuƒ‰ƒ“ƒ`‚Éƒ}[ƒW‚µ‚ÄAreleaseƒuƒ‰ƒ“ƒ`‚ðíœ
-‡FƒŠƒŠ[ƒX(masterƒuƒ‰ƒ“ƒ`‚ÌƒfƒvƒƒC)
-‡GƒŠƒŠ[ƒXŒãAƒoƒO‚ª”­¶‚µ‚½ê‡‚É‚Ímasterƒuƒ‰ƒ“ƒ`‚©‚çhotfixƒuƒ‰ƒ“ƒ`‚ðØ‚Á‚Ä‘Î‰ž
-‡HƒoƒO‘Î‰ž‚ªŠ®—¹‚µ‚½‚çmasterƒuƒ‰ƒ“ƒ`‚Éƒ}[ƒW‚µ‚ÄAhotfixƒuƒ‰ƒ“ƒ`‚ðíœ
+â‘¤é–‹ç™ºãŒçµ‚äº†ã—ãŸã‚‰developãƒ–ãƒ©ãƒ³ãƒã‹ã‚‰releaseãƒ–ãƒ©ãƒ³ãƒã‚’åˆ‡ã£ã¦ãƒªãƒªãƒ¼ã‚¹æº–å‚™
+â‘¥releaseãƒ–ãƒ©ãƒ³ãƒã®ç·¨é›†å®Œäº†å¾Œã€developãƒ–ãƒ©ãƒ³ãƒã¨masterãƒ–ãƒ©ãƒ³ãƒã«ãƒžãƒ¼ã‚¸ã—ã¦ã€releaseãƒ–ãƒ©ãƒ³ãƒã‚’å‰Šé™¤
+â‘¦ãƒªãƒªãƒ¼ã‚¹(masterãƒ–ãƒ©ãƒ³ãƒã®ãƒ‡ãƒ—ãƒ­ã‚¤)
+â‘§ãƒªãƒªãƒ¼ã‚¹å¾Œã€ãƒã‚°ãŒç™ºç”Ÿã—ãŸå ´åˆã«ã¯masterãƒ–ãƒ©ãƒ³ãƒã‹ã‚‰hotfixãƒ–ãƒ©ãƒ³ãƒã‚’åˆ‡ã£ã¦å¯¾å¿œ
+â‘¨ãƒã‚°å¯¾å¿œãŒå®Œäº†ã—ãŸã‚‰masterãƒ–ãƒ©ãƒ³ãƒã«ãƒžãƒ¼ã‚¸ã—ã¦ã€hotfixãƒ–ãƒ©ãƒ³ãƒã‚’å‰Šé™¤
 
-‡D`‡H‚ðŒJ‚è•Ô‚µ‚Äƒo[ƒWƒ‡ƒ“ŠÇ—‚ð‰^—p‚·‚é
+â‘¤ï½žâ‘¨ã‚’ç¹°ã‚Šè¿”ã—ã¦ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç®¡ç†ã‚’é‹ç”¨ã™ã‚‹
 
-ì‹Æ‚ðs‚¤‚Ì‚Ífeatureƒuƒ‰ƒ“ƒ`/releaseƒuƒ‰ƒ“ƒ`/hotfixƒuƒ‰ƒ“ƒ`ã‚Å
-developƒuƒ‰ƒ“ƒ`/masterƒuƒ‰ƒ“ƒ`‚Å‚Íì‹Æ‚Ís‚í‚È‚¢B
-
-
+ä½œæ¥­ã‚’è¡Œã†ã®ã¯featureãƒ–ãƒ©ãƒ³ãƒ/releaseãƒ–ãƒ©ãƒ³ãƒ/hotfixãƒ–ãƒ©ãƒ³ãƒä¸Šã§
+developãƒ–ãƒ©ãƒ³ãƒ/masterãƒ–ãƒ©ãƒ³ãƒã§ã¯ä½œæ¥­ã¯è¡Œã‚ãªã„ã€‚
 
 
 
- master
-masterƒuƒ‰ƒ“ƒ`‚Å‚ÍAƒŠƒŠ[ƒX‰Â”\‚Èó‘Ô‚¾‚¯‚ðŠÇ—‚µ‚Ü‚·B‚Ü‚½AƒRƒ~ƒbƒg‚É‚Íƒ^ƒO‚ðŽg—p‚µ‚ÄƒŠƒŠ[ƒX”Ô†‚ð‹L˜^‚µ‚Ü‚·B
 
- develop = “‡ƒuƒ‰ƒ“ƒ`
-developƒuƒ‰ƒ“ƒ`‚Å‚ÍAæ‚ÌƒŠƒŠ[ƒX‚ÉŒü‚¯‚½•’i‚ÌŠJ”­‚ÅŽg—p‚·‚éƒuƒ‰ƒ“ƒ`‚Å‚·Bæ‚Éà–¾‚µ‚½“‡ƒuƒ‰ƒ“ƒ`‚Ì–ðŠ„‚ð’S‚¢‚Ü‚·B
 
- ƒtƒB[ƒ`ƒƒ[ƒuƒ‰ƒ“ƒ` = ƒgƒsƒbƒNƒuƒ‰ƒ“ƒ`
-ƒtƒB[ƒ`ƒƒ[ƒuƒ‰ƒ“ƒ`‚Å‚ÍAæ‚Éà–¾‚µ‚½ƒgƒsƒbƒNƒuƒ‰ƒ“ƒ`‚Ì–ðŠ„‚ð’S‚¢‚Ü‚·B
-‚±‚Ìƒuƒ‰ƒ“ƒ`‚ÍV‹@”\‚ÌŠJ”­‚âAƒoƒOC³‚ðs‚¤Û‚Édevelopƒuƒ‰ƒ“ƒ`‚©‚ç•ªŠò‚µ‚Ü‚·B
-ƒtƒB[ƒ`ƒƒ[ƒuƒ‰ƒ“ƒ`‚Å‚Ìì‹Æ‚ÍŠî–{“I‚É‹¤—L‚·‚é•K—v‚ª‚È‚¢‚Ì‚ÅAƒŠƒ‚[ƒg‚Å‚ÍŠÇ—‚µ‚Ü‚¹‚ñB
-ŠJ”­‚ªŠ®—¹‚µ‚½‚çAdevelopƒuƒ‰ƒ“ƒ`‚Éƒ}[ƒW‚ðs‚¤‚±‚Æ‚ÅŒöŠJ‚µ‚Ü‚·B
+â–¡master
+masterãƒ–ãƒ©ãƒ³ãƒã§ã¯ã€ãƒªãƒªãƒ¼ã‚¹å¯èƒ½ãªçŠ¶æ…‹ã ã‘ã‚’ç®¡ç†ã—ã¾ã™ã€‚ã¾ãŸã€ã‚³ãƒŸãƒƒãƒˆã«ã¯ã‚¿ã‚°ã‚’ä½¿ç”¨ã—ã¦ãƒªãƒªãƒ¼ã‚¹ç•ªå·ã‚’è¨˜éŒ²ã—ã¾ã™ã€‚
 
- HEAD
-HEAD‚Æ‚ÍAŒ»ÝŽg—p‚µ‚Ä‚¢‚éƒuƒ‰ƒ“ƒ`‚Ìæ“ª‚ð•\‚·–¼‘O‚Å‚·B
-ƒfƒtƒHƒ‹ƒg‚Å‚Ímaster‚Ìæ“ª‚ð•\‚µ‚Ä‚¢‚Ü‚·BHEAD‚ªˆÚ“®‚·‚é‚±‚Æ‚ÅAŽg—p‚·‚éƒuƒ‰ƒ“ƒ`‚ª•ÏX‚³‚ê‚Ü‚·B
-¡‚¢‚éƒuƒ‰ƒ“ƒ`‚ÌÅVƒRƒ~ƒbƒgB
-ƒuƒ‰ƒ“ƒ`‚ðˆÚ“®iƒ`ƒFƒbƒNƒAƒEƒgj‚·‚ê‚ÎHEAD‚ÌˆÊ’u‚à•Ï‚í‚é
-HEAD^AHEAD~‚ÍHEAD‚©‚çˆê‚Â‘O‚ÌƒRƒ~ƒbƒg‚Æ‚¢‚¤ˆÓ–¡
-HEAD^^^AHEAD~~~AHEAD~3‚Ì‚æ‚¤‚È•û–@‚Å‚¢‚­‚Â‘O‚ÌƒRƒ~ƒbƒg‚©Žw’è
+â–¡develop = çµ±åˆãƒ–ãƒ©ãƒ³ãƒ
+developãƒ–ãƒ©ãƒ³ãƒã§ã¯ã€å…ˆã®ãƒªãƒªãƒ¼ã‚¹ã«å‘ã‘ãŸæ™®æ®µã®é–‹ç™ºã§ä½¿ç”¨ã™ã‚‹ãƒ–ãƒ©ãƒ³ãƒã§ã™ã€‚å…ˆã«èª¬æ˜Žã—ãŸçµ±åˆãƒ–ãƒ©ãƒ³ãƒã®å½¹å‰²ã‚’æ‹…ã„ã¾ã™ã€‚
 
- add
-ì‹ÆƒfƒBƒŒƒNƒgƒŠ“à‚Ì•ÏX‚ðƒXƒe[ƒWƒ“ƒOƒGƒŠƒA‚É’Ç‰Á‚·‚éƒRƒ}ƒ“ƒh‚Å‚·B
-‚±‚ÌƒRƒ}ƒ“ƒh‚ÍAŒÂX‚Ìƒtƒ@ƒCƒ‹‚ÌƒAƒbƒvƒf[ƒg“à—e‚ðŽŸ‰ñƒRƒ~ƒbƒg‚Ì‘ÎÛ‚Æ‚·‚é‚±‚Æ‚ð Git ‚ÉŽwŽ¦‚µ‚Ü‚·B
-‚½‚¾‚µAgit add ƒRƒ}ƒ“ƒh‚¾‚¯‚Å‚ÍŽÀÛ‚É‚Íƒ[ƒJƒ‹ƒŠƒ|ƒWƒgƒŠ‚É‰½‚Ì‰e‹¿‚à—^‚¦‚¸A
-git commit ƒRƒ}ƒ“ƒh‚ðŽÀs‚·‚é‚Ü‚Å‚Í•ÏX‚ªŽÀÛ‚É‹L˜^‚³‚ê‚é‚±‚Æ‚Í‚ ‚è‚Ü‚¹‚ñB
-‚±‚ê‚ç‚ÌƒRƒ}ƒ“ƒh‚ÆŠÖ˜A‚µ‚ÄAì‹ÆƒfƒBƒŒƒNƒgƒŠ‚¨‚æ‚ÑƒXƒe[ƒWƒ“ƒOƒGƒŠƒA‚Ìó‘Ô‚ðŠm”F‚·‚é‚½‚ß‚ÉAgit status ƒRƒ}ƒ“ƒh‚ª—p‚¢‚ç‚ê‚Ü‚·B
+â–¡ãƒ•ã‚£ãƒ¼ãƒãƒ£ãƒ¼ãƒ–ãƒ©ãƒ³ãƒ = ãƒˆãƒ”ãƒƒã‚¯ãƒ–ãƒ©ãƒ³ãƒ
+ãƒ•ã‚£ãƒ¼ãƒãƒ£ãƒ¼ãƒ–ãƒ©ãƒ³ãƒã§ã¯ã€å…ˆã«èª¬æ˜Žã—ãŸãƒˆãƒ”ãƒƒã‚¯ãƒ–ãƒ©ãƒ³ãƒã®å½¹å‰²ã‚’æ‹…ã„ã¾ã™ã€‚
+ã“ã®ãƒ–ãƒ©ãƒ³ãƒã¯æ–°æ©Ÿèƒ½ã®é–‹ç™ºã‚„ã€ãƒã‚°ä¿®æ­£ã‚’è¡Œã†éš›ã«developãƒ–ãƒ©ãƒ³ãƒã‹ã‚‰åˆ†å²ã—ã¾ã™ã€‚
+ãƒ•ã‚£ãƒ¼ãƒãƒ£ãƒ¼ãƒ–ãƒ©ãƒ³ãƒã§ã®ä½œæ¥­ã¯åŸºæœ¬çš„ã«å…±æœ‰ã™ã‚‹å¿…è¦ãŒãªã„ã®ã§ã€ãƒªãƒ¢ãƒ¼ãƒˆã§ã¯ç®¡ç†ã—ã¾ã›ã‚“ã€‚
+é–‹ç™ºãŒå®Œäº†ã—ãŸã‚‰ã€developãƒ–ãƒ©ãƒ³ãƒã«ãƒžãƒ¼ã‚¸ã‚’è¡Œã†ã“ã¨ã§å…¬é–‹ã—ã¾ã™ã€‚
 
-git add .       ‘S‚Ä‚Ì•ÏX‚ðadd‚·‚é
+â–¡HEAD
+HEADã¨ã¯ã€ç¾åœ¨ä½¿ç”¨ã—ã¦ã„ã‚‹ãƒ–ãƒ©ãƒ³ãƒã®å…ˆé ­ã‚’è¡¨ã™åå‰ã§ã™ã€‚
+ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã¯masterã®å…ˆé ­ã‚’è¡¨ã—ã¦ã„ã¾ã™ã€‚HEADãŒç§»å‹•ã™ã‚‹ã“ã¨ã§ã€ä½¿ç”¨ã™ã‚‹ãƒ–ãƒ©ãƒ³ãƒãŒå¤‰æ›´ã•ã‚Œã¾ã™ã€‚
+ä»Šã„ã‚‹ãƒ–ãƒ©ãƒ³ãƒã®æœ€æ–°ã‚³ãƒŸãƒƒãƒˆã€‚
+ãƒ–ãƒ©ãƒ³ãƒã‚’ç§»å‹•ï¼ˆãƒã‚§ãƒƒã‚¯ã‚¢ã‚¦ãƒˆï¼‰ã™ã‚Œã°HEADã®ä½ç½®ã‚‚å¤‰ã‚ã‚‹
+HEAD^ã€HEAD~ã¯HEADã‹ã‚‰ä¸€ã¤å‰ã®ã‚³ãƒŸãƒƒãƒˆã¨ã„ã†æ„å‘³
+HEAD^^^ã€HEAD~~~ã€HEAD~3ã®ã‚ˆã†ãªæ–¹æ³•ã§ã„ãã¤å‰ã®ã‚³ãƒŸãƒƒãƒˆã‹æŒ‡å®š
 
- ƒRƒ~ƒbƒg
-ƒXƒe[ƒW‚³‚ê‚½ƒXƒiƒbƒvƒVƒ‡ƒbƒg‚ðƒ[ƒJƒ‹ƒŠƒ|ƒWƒgƒŠ‚ÉƒRƒ~ƒbƒg‚·‚éƒRƒ}ƒ“ƒh
-git commit ‚ÍAƒXƒe[ƒW‚³‚ê‚½ƒXƒiƒbƒvƒVƒ‡ƒbƒg‚ðƒ[ƒJƒ‹ƒŠƒ|ƒWƒgƒŠ‚ÉƒRƒ~ƒbƒg‚·‚éƒRƒ}ƒ“ƒh‚Å‚·B
-ƒRƒ~ƒbƒg‚³‚ê‚½ƒXƒiƒbƒvƒVƒ‡ƒbƒg‚ÍƒvƒƒWƒFƒNƒg‚ÌuˆÀ‘S‚É•Û‘¶‚³‚ê‚½vƒo[ƒWƒ‡ƒ“‚Å‚ ‚é‚Æ‰ðŽß‚Å‚«A
-–¾Ž¦“I‚É•ÏXŽwŽ¦‚ªs‚í‚ê‚È‚¢ŒÀ‚è Git ‚ª‚»‚ê‚ð•ÏX‚·‚é‚±‚Æ‚Í‚ ‚è‚Ü‚¹‚ñB
-ƒXƒiƒbƒvƒVƒ‡ƒbƒg‚Íƒ[ƒJƒ‹ƒŠƒ|ƒWƒgƒŠ‚ÉƒRƒ~ƒbƒg‚³‚ê‚é‚½‚ßA‘¼‚Ì Git ƒŠƒ|ƒWƒgƒŠ‚É‚Í‘S‚­‰e‹¿‚ð—^‚¦‚Ü‚¹‚ñB
+â–¡add
+ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®å¤‰æ›´ã‚’ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ³ã‚°ã‚¨ãƒªã‚¢ã«è¿½åŠ ã™ã‚‹ã‚³ãƒžãƒ³ãƒ‰ã§ã™ã€‚
+ã“ã®ã‚³ãƒžãƒ³ãƒ‰ã¯ã€å€‹ã€…ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆå†…å®¹ã‚’æ¬¡å›žã‚³ãƒŸãƒƒãƒˆã®å¯¾è±¡ã¨ã™ã‚‹ã“ã¨ã‚’ Git ã«æŒ‡ç¤ºã—ã¾ã™ã€‚
+ãŸã ã—ã€git add ã‚³ãƒžãƒ³ãƒ‰ã ã‘ã§ã¯å®Ÿéš›ã«ã¯ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒã‚¸ãƒˆãƒªã«ä½•ã®å½±éŸ¿ã‚‚ä¸Žãˆãšã€
+git commit ã‚³ãƒžãƒ³ãƒ‰ã‚’å®Ÿè¡Œã™ã‚‹ã¾ã§ã¯å¤‰æ›´ãŒå®Ÿéš›ã«è¨˜éŒ²ã•ã‚Œã‚‹ã“ã¨ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+ã“ã‚Œã‚‰ã®ã‚³ãƒžãƒ³ãƒ‰ã¨é–¢é€£ã—ã¦ã€ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŠã‚ˆã³ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ³ã‚°ã‚¨ãƒªã‚¢ã®çŠ¶æ…‹ã‚’ç¢ºèªã™ã‚‹ãŸã‚ã«ã€git status ã‚³ãƒžãƒ³ãƒ‰ãŒç”¨ã„ã‚‰ã‚Œã¾ã™ã€‚
 
- fetch
+git add .       å…¨ã¦ã®å¤‰æ›´ã‚’addã™ã‚‹
+
+â–¡ã‚³ãƒŸãƒƒãƒˆ
+ã‚¹ãƒ†ãƒ¼ã‚¸ã•ã‚ŒãŸã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒã‚¸ãƒˆãƒªã«ã‚³ãƒŸãƒƒãƒˆã™ã‚‹ã‚³ãƒžãƒ³ãƒ‰
+git commit ã¯ã€ã‚¹ãƒ†ãƒ¼ã‚¸ã•ã‚ŒãŸã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã‚’ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒã‚¸ãƒˆãƒªã«ã‚³ãƒŸãƒƒãƒˆã™ã‚‹ã‚³ãƒžãƒ³ãƒ‰ã§ã™ã€‚
+ã‚³ãƒŸãƒƒãƒˆã•ã‚ŒãŸã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã¯ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®ã€Œå®‰å…¨ã«ä¿å­˜ã•ã‚ŒãŸã€ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§ã‚ã‚‹ã¨è§£é‡ˆã§ãã€
+æ˜Žç¤ºçš„ã«å¤‰æ›´æŒ‡ç¤ºãŒè¡Œã‚ã‚Œãªã„é™ã‚Š Git ãŒãã‚Œã‚’å¤‰æ›´ã™ã‚‹ã“ã¨ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã¯ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒã‚¸ãƒˆãƒªã«ã‚³ãƒŸãƒƒãƒˆã•ã‚Œã‚‹ãŸã‚ã€ä»–ã® Git ãƒªãƒã‚¸ãƒˆãƒªã«ã¯å…¨ãå½±éŸ¿ã‚’ä¸Žãˆã¾ã›ã‚“ã€‚
+
+â–¡fetch
 git fetch [REMOTENAME] [BRANCH] 
-Žw’è‚µ‚½ƒŠƒ‚[ƒgƒŠƒ|ƒWƒgƒŠ‚©‚çŽw’è‚µ‚½ƒuƒ‰ƒ“ƒ`‚ðƒtƒFƒbƒ`‚·‚éB
+æŒ‡å®šã—ãŸãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒã‚¸ãƒˆãƒªã‹ã‚‰æŒ‡å®šã—ãŸãƒ–ãƒ©ãƒ³ãƒã‚’ãƒ•ã‚§ãƒƒãƒã™ã‚‹ã€‚
 
 
 
 
 
 
-1. ƒNƒ[ƒ“‚·‚éBmasterƒuƒ‰ƒ“ƒ`‚ª—Ž‚¿‚Ä‚«‚Ü‚·B
+1. ã‚¯ãƒ­ãƒ¼ãƒ³ã™ã‚‹ã€‚masterãƒ–ãƒ©ãƒ³ãƒãŒè½ã¡ã¦ãã¾ã™ã€‚
 git clone PATH
 
-2. ƒ[ƒJƒ‹‚Ådevelopƒuƒ‰ƒ“ƒ`‚ðØ‚éB
+2. ãƒ­ãƒ¼ã‚«ãƒ«ã§developãƒ–ãƒ©ãƒ³ãƒã‚’åˆ‡ã‚‹ã€‚
 git branch develop
 
-3. ƒuƒ‰ƒ“ƒ`‚ÉHEAD‚ðˆÚ‚·B(= ƒuƒ‰ƒ“ƒ`‚ÉˆÚ“®‚·‚é)
+3. ãƒ–ãƒ©ãƒ³ãƒã«HEADã‚’ç§»ã™ã€‚(= ãƒ–ãƒ©ãƒ³ãƒã«ç§»å‹•ã™ã‚‹)
 git checkout develop
 
-4. ƒŠƒ‚[ƒg‚Ìdevelopƒuƒ‰ƒ“ƒ`‚ðpull‚·‚éB
-git pull origin develop                              ªŒ»Ý‚ªdevelopƒuƒ‰ƒ“ƒ`‚Å‚ ‚èAÅVó‘Ô‚Ì‚½‚ß‚±‚±‚Ü‚ÅÈ—ª
+4. ãƒªãƒ¢ãƒ¼ãƒˆã®developãƒ–ãƒ©ãƒ³ãƒã‚’pullã™ã‚‹ã€‚
+git pull origin develop                              â†‘ç¾åœ¨ãŒdevelopãƒ–ãƒ©ãƒ³ãƒã§ã‚ã‚Šã€æœ€æ–°çŠ¶æ…‹ã®ãŸã‚ã“ã“ã¾ã§çœç•¥
 
-5. developƒuƒ‰ƒ“ƒ`‚©‚çfeatureƒuƒ‰ƒ“ƒ`‚ðØ‚è‚Ü‚·B
+5. developãƒ–ãƒ©ãƒ³ãƒã‹ã‚‰featureãƒ–ãƒ©ãƒ³ãƒã‚’åˆ‡ã‚Šã¾ã™ã€‚
 git branch feature                                   git branch develop feature/tix_43921
 
-6. featureƒuƒ‰ƒ“ƒ`‚ÉˆÚ‚Á‚ÄŠJ”­‚µ‚Ü‚·B
+6. featureãƒ–ãƒ©ãƒ³ãƒã«ç§»ã£ã¦é–‹ç™ºã—ã¾ã™ã€‚
 git checkout feature                                 git checkout -b feature/tix_43921
-git add .                                            ƒXƒe[ƒWƒ“ƒOƒGƒŠƒA‚Ö“o˜^
-git commit -m "ŠJ”­‚µ‚½"                             ƒRƒ~ƒbƒg
+git add .                                            ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ³ã‚°ã‚¨ãƒªã‚¢ã¸ç™»éŒ²
+git commit -m "é–‹ç™ºã—ãŸ"                             ã‚³ãƒŸãƒƒãƒˆ
 
-7. ƒ[ƒJƒ‹‚Ìdevelopƒuƒ‰ƒ“ƒ`‚Émerge‚µ‚Ü‚·B          developƒuƒ‰ƒ“ƒ`‚ÍƒŠƒ‚[ƒgB
+7. ãƒ­ãƒ¼ã‚«ãƒ«ã®developãƒ–ãƒ©ãƒ³ãƒã«mergeã—ã¾ã™ã€‚          developãƒ–ãƒ©ãƒ³ãƒã¯ãƒªãƒ¢ãƒ¼ãƒˆã€‚
 git checkout develop
 git merge feature                                    git merge feature/tix_43921
 
-•¡”l‚Å‚â‚Á‚Ä‚éŽž‚ÍAmerge‚·‚é‘O‚ÉŠÇ—ŽÒ‚Æmerge‚µ‚Ä‚à—Ç‚¢‚©˜b‚µ‡‚¢‚Ü‚µ‚å‚¤B GitHub‚Ìê‡Afeatureƒuƒ‰ƒ“ƒ`‚ðdevelopƒuƒ‰ƒ“ƒ`‚Épullrequest‚·‚ê‚Î‚¢‚¢B
+è¤‡æ•°äººã§ã‚„ã£ã¦ã‚‹æ™‚ã¯ã€mergeã™ã‚‹å‰ã«ç®¡ç†è€…ã¨mergeã—ã¦ã‚‚è‰¯ã„ã‹è©±ã—åˆã„ã¾ã—ã‚‡ã†ã€‚ GitHubã®å ´åˆã€featureãƒ–ãƒ©ãƒ³ãƒã‚’developãƒ–ãƒ©ãƒ³ãƒã«pullrequestã™ã‚Œã°ã„ã„ã€‚
 
-8. ƒŠƒ‚[ƒg‚Ìdevelopƒuƒ‰ƒ“ƒ`‚Épush
+8. ãƒªãƒ¢ãƒ¼ãƒˆã®developãƒ–ãƒ©ãƒ³ãƒã«push
 git push PATH develop
 
-9. ‚±‚ê‚ðŒJ‚è•Ô‚µ‚ÄŠ®¬‚µ‚½‚çdevelopƒuƒ‰ƒ“ƒ`‚ðmaster‚Émerge‚µ‚ÄŒöŠJII
+9. ã“ã‚Œã‚’ç¹°ã‚Šè¿”ã—ã¦å®Œæˆã—ãŸã‚‰developãƒ–ãƒ©ãƒ³ãƒã‚’masterã«mergeã—ã¦å…¬é–‹ï¼ï¼
 
 
 
-ƒuƒ‰ƒ“ƒ`‚ªæ‚Éi‚ñ‚Å‚½‚çƒ}[ƒW‚©ƒŠƒx[ƒX
+ãƒ–ãƒ©ãƒ³ãƒãŒå…ˆã«é€²ã‚“ã§ãŸã‚‰ãƒžãƒ¼ã‚¸ã‹ãƒªãƒ™ãƒ¼ã‚¹
 
 
