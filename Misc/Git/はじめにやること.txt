@@ -1,0 +1,7 @@
+
+必ず実施する
+
+git config --local user.name "zzgiz"
+git config --local user.email "zzninja@gmail.com"
+
+
