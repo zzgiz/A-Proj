@@ -3,7 +3,7 @@
 #Description:
 #データ取得
 
-source /home/bduser/.bash_profile
+source /home/userhoge/.bash_profile
 
 cd /home/作業ディレクトリ/
 
