@@ -1,0 +1,79 @@
+■ ファイル一覧、検索
+
+S3 検索
+aws s3 ls [S3パス] --recursive --human-readable | grep -iE 'SearchWord' > result.txt
+
+-i 大文字小文字区別しない
+-E 正規表現
+
+S3 リスト作成
+aws s3 ls [S3パス] --recursive --human-readable --summarize > result.txt
+
+--summarize  全体サマリ表示
+
+
+EC2 検索
+find ./home/user1 -type f -iregex ".*SearchWord.*" | xargs ls -l --time-style=+%Y-%m-%d\ %H:%M:%S > result.txt
+
+-iregex  正規表現 大文字小文字区別しない
+-regex   正規表現 大文字小文字区別あり
+
+xargs 実行
+
+
+
+■ S3から復旧
+
+CREATE TABLE スキーマ.テーブル1
+
+TRUNCATE TABLE スキーマ.テーブル1;
+
+COPY スキーマ.テーブル1
+FROM 'S3パス/テーブルデータ.csv.gz' csv gzip credentials 'aws_access_key_id=XXXX;aws_secret_access_key=XXXX' DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
+
+  注意点
+    デリミタ          DELIMITER '\t'   DELIMITER ','
+    ヘッダ行あり      IGNOREHEADER 1
+    日付フォーマット  DATEFORMAT 'auto' TIMEFORMAT 'auto'
+    改行コード        \n
+    ファイル名        大文字、小文字を区別する
+
+
+
+
+■ S3 <-> EC2 コピー
+
+S3パスの全ファイルをEC2にコピー
+aws s3 cp [S3パス]/ . --recursive
+
+特定ファイルをEC2にコピー
+aws s3 cp [S3パス]/特定ファイル .
+
+EC2のファイルをS3にコピー
+aws s3 cp testfile [S3パス]
+
+
+ローカルからS3にコピー
+aws s3 cp <LocalPath> <S3Path>
+
+S3からローカルにコピー
+aws s3 cp <S3Path> <LocalPath>
+
+S3からS3にコピー
+aws s3 cp <S3Path> <S3Path>
+
+
+■ SQL実行
+
+psql -h ホスト名 -U ユーザ名 -d DB名 -p ポート -f ./test.sql >& test.log&
+
+psql -h XXXX.amazonaws.com -U user1 -d db1 -p 1234 -f ./test.sql >& test.log&
+
+
+
+
+
+
+
+
+
