@@ -165,7 +165,7 @@ order by dt desc;
 
 -- テーブル定義変換 Oralce → Redshift
 SELECT
-    CASE WHEN COLUMN_ID = 1 THEN 'CREATE TABLE md_dev.' || LOWER(TABLE_NAME) || ' (' ELSE '  , ' END AS MARK1
+    CASE WHEN COLUMN_ID = 1 THEN 'CREATE TABLE schema_abc.' || LOWER(TABLE_NAME) || ' (' ELSE '  , ' END AS MARK1
   , LOWER(COLUMN_NAME) || ' ' AS column_name
   , CASE WHEN DATA_TYPE = 'VARCHAR2' THEN 'varchar' ELSE
         CASE WHEN DATA_TYPE = 'NUMBER' THEN 'numeric' ELSE
