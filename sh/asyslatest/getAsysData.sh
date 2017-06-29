@@ -2,9 +2,9 @@
 
 if [ ${#} -lt 1 ]; then
   echo "  例1) データを取得しRedshiftに投入" 1>&2
-  echo "    sh ./getAsysData.sh BU_M" 1>&2
+  echo "    sh ./getAsysData.sh TRN_TBL" 1>&2
   echo "  例2) SQLのみ作成" 1>&2
-  echo "    sh ./getAsysData.sh BU_M 0" 1>&2
+  echo "    sh ./getAsysData.sh TRN_TBL 0" 1>&2
   exit 1
 fi
 
