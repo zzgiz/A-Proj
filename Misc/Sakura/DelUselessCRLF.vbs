@@ -1,4 +1,4 @@
-' SQL�̖��ʂȉ��s������
+' SQLの無駄な改行を除く
 Option Explicit
 
 Dim rows, cols
