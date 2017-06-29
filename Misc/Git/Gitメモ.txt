@@ -10,8 +10,12 @@ git push --delete origin feature/tix_3         リモートブランチの削除
 git branch -d feature/tix_3                    ローカルブランチの削除
 git remote prune origin --dry-run              ローカルのブランチ一覧最新化 (試し)
 git remote prune origin                        ローカルのブランチ一覧最新化
-------------------------------------------------
 
+------- masterにマージ
+git checkout master                            masterに移動
+git merge develop                              develop → master (ローカル)
+git push origin master                         ローカルのmasterをリモートに反映
+------------------------------------------------
 
 git branch feature/tix_12345     (現在devlopブランチであること)
 git checkout feature/tix_12345
@@ -27,7 +31,6 @@ git checkout -b feature/tix_43921 develop
 
 新機能のための修正
 ---------------------------------------------------------
-
 
 ---------------------------------------------------------
 fix    ：バグ修正
