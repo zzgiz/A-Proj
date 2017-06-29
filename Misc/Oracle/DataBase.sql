@@ -94,7 +94,7 @@ ORDER BY
 select * from USER_TAB_PARTITIONS where table_name = :TABLE_NAME;
 
 -- パーティション指定
-select * from FR_LOC_SKU_WK_ACT partition (PART_20170101);
+select * from TABLE_AA01 partition (PART_20170101);
 
 -- インデックス
 select * from USER_IND_COLUMNS where table_name = :TABLE_NAME order by index_name, column_position;
@@ -144,7 +144,7 @@ order by last_ddl_time desc, object_name;
 -- パッケージ確認 ソース
 select name, text 
 from user_source
-where name like 'FR_D_%' and type = 'PACKAGE BODY'
+where name like 'PCKG_%' and type = 'PACKAGE BODY'
 and text like '%定義変更%'
 --and name = 'PAC_01_02'
 order by name, line
@@ -163,17 +163,50 @@ order by dt desc;
 
 
 
-/*
-■ sqlplus
+-- テーブル定義変換 Oralce → Redshift
+SELECT
+    CASE WHEN COLUMN_ID = 1 THEN 'CREATE TABLE schema_abc.' || LOWER(TABLE_NAME) || ' (' ELSE '  , ' END AS MARK1
+  , LOWER(COLUMN_NAME) || ' ' AS column_name
+  , CASE WHEN DATA_TYPE = 'VARCHAR2' THEN 'varchar' ELSE
+        CASE WHEN DATA_TYPE = 'NUMBER' THEN 'numeric' ELSE
+            CASE WHEN DATA_TYPE = 'DATE' THEN 'timestamp' ELSE DATA_TYPE END
+        END
+    END AS DATA_TYPE
+  , CASE WHEN DATA_TYPE = 'VARCHAR2' THEN '(' || DATA_LENGTH || ')' ELSE
+        CASE WHEN DATA_TYPE = 'NUMBER' THEN '(' || DATA_PRECISION || ',' || DATA_SCALE || ')' ELSE
+            CASE WHEN DATA_TYPE = 'DATE' THEN NULL ELSE NULL END
+        END
+    END AS LENGTH
+  , CASE WHEN NULLABLE = 'Y' THEN NULL ELSE ' NOT NULL' END AS NULL_VAL
+  , CASE WHEN COLUMN_ID = max_col THEN ');' ELSE NULL END AS MARK2
+FROM (
+    -- Oracle定義
+    SELECT
+        col.COLUMN_ID
+      , MAX(col.COLUMN_ID) OVER(PARTITION BY tbl.table_name) AS max_col
+      , tbl.TABLE_NAME
+      , col.COLUMN_NAME
+      , col.DATA_TYPE
+      , col.DATA_PRECISION
+      , col.DATA_SCALE
+      , col.DATA_LENGTH
+      , col.NULLABLE
+    FROM
+        USER_TABLES tbl
+    INNER JOIN USER_TAB_COLUMNS col
+    ON
+        tbl.TABLE_NAME = col.TABLE_NAME
+    WHERE
+        tbl.TABLE_NAME in ('TABLE_A','TABLE_B')
+    ORDER BY
+        col.TABLE_NAME
+      , col.COLUMN_ID
+)
+ORDER BY
+    TABLE_NAME
+  , COLUMN_ID
+;
 
-sqlplus ユーザ名/パスワード@ホスト名:ポート番号/サービス名
-sqlplus USER/PASSWORD@123.456.789.1:1234/service.name.local
 
 
-sqlplus ユーザ名/パスワード@TNS名
-sqlplus USER/PASSWORD@trn_db1
 
-SQLファイルの実行
-sqlplus USER/PASSWORD@123.456.789.1:1234/service.name.local @./test.sql
-
-*/
