@@ -94,7 +94,7 @@ ORDER BY
 select * from USER_TAB_PARTITIONS where table_name = :TABLE_NAME;
 
 -- パーティション指定
-select * from FR_LOC_SKU_WK_ACT partition (PART_20170101);
+select * from TABLE_AA01 partition (PART_20170101);
 
 -- インデックス
 select * from USER_IND_COLUMNS where table_name = :TABLE_NAME order by index_name, column_position;
@@ -144,7 +144,7 @@ order by last_ddl_time desc, object_name;
 -- パッケージ確認 ソース
 select name, text 
 from user_source
-where name like 'FR_D_%' and type = 'PACKAGE BODY'
+where name like 'PCKG_%' and type = 'PACKAGE BODY'
 and text like '%定義変更%'
 --and name = 'PAC_01_02'
 order by name, line
