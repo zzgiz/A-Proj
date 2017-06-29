@@ -7,5 +7,5 @@ git config --local user.email "zzninja@gmail.com"
 
 その他初期設定
 git config status.showUntrackedFiles all
-(git status -uall と同意。追加されたファイルも含め全てのファイルを表示する)
+(git status -uall と同意。git status時に追加されたファイルも含め全てのファイルを表示する)
 
