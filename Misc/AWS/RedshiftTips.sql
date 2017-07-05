@@ -126,19 +126,26 @@ ORDER BY
 
 -- テーブルコメント取得
 SELECT DISTINCT
-    pg_stat_user_tables.schemaname AS SCHEMA
-  , pg_stat_user_tables.relname AS tablename
-  , tablecom.description AS table_comment
+    utb.schemaname          AS schema
+  , utb.relname             AS tbl_name
+  , cmt.description         AS tbl_comment
 FROM
-    pg_stat_user_tables
-  , pg_attribute
-  , pg_description tablecom
-WHERE pg_attribute.attrelid         = pg_stat_user_tables.relid
-AND   pg_attribute.attnum           > 0
-AND   pg_attribute.attrelid         = tablecom.objoid
-AND   tablecom.objsubid             = 0
-AND   pg_stat_user_tables.schemaname = 'schema_name' -- スキーマ名 
---AND pg_stat_user_tables.relname     = 'table_name'   -- テーブル名
+    pg_stat_user_tables utb
+INNER JOIN
+    pg_attribute        att
+ON
+    att.attrelid    = utb.relid
+AND att.attnum      > 0
+LEFT OUTER JOIN
+    pg_description      cmt
+ON
+    cmt.objsubid    = 0
+AND cmt.objoid      = att.attrelid
+WHERE
+    utb.schemaname  = 'md_dev' -- スキーマ名 
+--AND utb.relname     = 'v_zz_test'  -- テーブル名
+ORDER BY
+    tbl_name
 ;
 
 
