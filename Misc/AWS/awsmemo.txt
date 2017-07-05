@@ -22,14 +22,10 @@ xargs 実行
 
 
 
-■ S3から復旧
+■ S3から復旧 （OracleでCSV出力した場合）
 
-CREATE TABLE スキーマ.テーブル1
-
-TRUNCATE TABLE スキーマ.テーブル1;
-
-COPY スキーマ.テーブル1
-FROM 'S3パス/テーブルデータ.csv.gz' csv gzip credentials 'aws_access_key_id=XXXX;aws_secret_access_key=XXXX' DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
+COPY schema.TARGET_TABLE
+FROM 's3://Ｓ３パス/TARGET_TABLE.csv.gz' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' CSV GZIP DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
 
   注意点
     デリミタ          DELIMITER '\t'   DELIMITER ','
@@ -37,6 +33,45 @@ FROM 'S3パス/テーブルデータ.csv.gz' csv gzip credentials 'aws_access_ke
     日付フォーマット  DATEFORMAT 'auto' TIMEFORMAT 'auto'
     改行コード        \n
     ファイル名        大文字、小文字を区別する
+
+
+
+■ S3から復旧 （OracleでCSV出力した場合）
+
+COPY schema.TARGET_TABLE
+FROM 's3://Ｓ３パス/TARGET_TABLE.csv.gz' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' CSV GZIP DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
+
+  注意点
+    デリミタ          DELIMITER '\t'   DELIMITER ','
+    ヘッダ行あり      IGNOREHEADER 1
+    日付フォーマット  DATEFORMAT 'auto' TIMEFORMAT 'auto'
+    改行コード        \n
+    ファイル名        大文字、小文字を区別する
+
+
+
+
+■ S3へ退避、S3から復旧 （一般）
+
+  ADDQUOTES             ダブルクォーテーションをつける  → 読み込む際は、REMOVEQUOTES  が必要
+  ALLOWOVERWRITE        S3ファイル上書きする
+  DELIMITER ','         デリミタ
+  PARALLEL OFF          通常(省略)時はON。 OFFの場合、6.2GBまで1つのファイルに出力する。時間がかかる
+
+  ※ヘッダは出力されない!!!
+
+○デリミタ = タブの場合
+UNLOAD($$ SELECT * FROM schema.TARGET_TABLE $$)
+TO 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' DELIMITER '\t' GZIP ALLOWOVERWRITE;
+  ↓
+COPY schema.TARGET_TABLE FROM 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' GZIP DELIMITER '\t' DATEFORMAT 'auto';"
+
+
+○デリミタ = カンマ、ダブルクォーテーションの場合
+UNLOAD($$ SELECT * FROM schema.TARGET_TABLE $$)
+TO 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' DELIMITER ',' GZIP ADDQUOTES ALLOWOVERWRITE;
+  ↓
+COPY schema.TARGET_TABLE FROM 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' GZIP DELIMITER ',' REMOVEQUOTES DATEFORMAT 'auto';"
 
 
 
