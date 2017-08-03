@@ -25,10 +25,10 @@ if [ -e ${CSV_PATH} ]; then
   rm -f ${CSV_PATH}
 fi
 
-sqlplus -s DB名/パスワード@接続文字列 @./getrepdata.sql ${CSV_PATH} ${GET_DT} >> ./getrep.log 1>&2
+sqlplus -s DB名/パスワード@接続文字列 @./getrepdata.sql ${CSV_PATH} ${GET_DT} >> ./getrep.log 2>&1
 
 # UTF→SJIS変換
 nkf -Ws ${CSV_PATH} > ${CSV_PATH}_tmp
 mv ${CSV_PATH}_tmp ${CSV_PATH}
 
-aws s3 cp ${CSV_PATH} s3://S3出力先/${TODAY}/${CSV_FILE} >> ./getrep.log 2>&1
+aws s3 cp ${CSV_PATH} s3://S3出力先/${TODAY}/${CSV_FILE} 1>/dev/null 2>>./getrep.log

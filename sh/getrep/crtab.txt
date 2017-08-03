@@ -8,15 +8,15 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name command to be executed
 
-#Customer data from Reporting
-10 23 * * 7 sh /home/作業ディレクトリ/getrep.sh >> /home/作業ディレクトリ/getrep.log 2>&1
-
+#データ取得スクリプト
+30 8 * * 7 sh /home/作業ディレクトリ/getrep.sh >> /home/作業ディレクトリ/getrep.log 2>&1
 
 
 0  1  2  3  4  5  6  7
 Su Mo Tu We Th Fr St Su
 
 
+例の場合は日曜の8:30に起動
 
 
 crontab -e   編集
