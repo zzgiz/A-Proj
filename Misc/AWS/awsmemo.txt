@@ -1,92 +1,127 @@
-■ ファイル一覧、検索
+--------------------------------------------------------------------------------------------------------
+-- Redshift
+--------------------------------------------------------------------------------------------------------
+■ S3 <-> Redshift
 
-S3 検索
-aws s3 ls [S3パス] --recursive --human-readable | grep -iE 'SearchWord' > result.txt
-
--i 大文字小文字区別しない
--E 正規表現
-
-S3 リスト作成
-aws s3 ls [S3パス] --recursive --human-readable --summarize > result.txt
-
---summarize  全体サマリ表示
-
-
-EC2 検索
-find ./home/user1 -type f -iregex ".*SearchWord.*" | xargs ls -l --time-style=+%Y-%m-%d\ %H:%M:%S > result.txt
-
--iregex  正規表現 大文字小文字区別しない
--regex   正規表現 大文字小文字区別あり
-
-xargs 実行
+○デリミタ = タブの場合
+UNLOAD( 'SELECT * FROM schema_name.TARGET_TABLE' )
+    TO 's3://S3パス/TARGET_TABLE'
+    CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
+    DELIMITER '\t' GZIP ALLOWOVERWRITE;
+ ↓
+COPY schema_name.TARGET_TABLE FROM 's3://S3パス/TARGET_TABLE'
+    CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
+    GZIP DELIMITER '\t' DATEFORMAT 'auto';
 
 
-
-■ S3から復旧 （OracleでCSV出力した場合）
-
-COPY schema.TARGET_TABLE
-FROM 's3://Ｓ３パス/TARGET_TABLE.csv.gz' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' CSV GZIP DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
-
-  注意点
-    デリミタ          DELIMITER '\t'   DELIMITER ','
-    ヘッダ行あり      IGNOREHEADER 1
-    日付フォーマット  DATEFORMAT 'auto' TIMEFORMAT 'auto'
-    改行コード        \n
-    ファイル名        大文字、小文字を区別する
+○デリミタ = カンマ、ダブルクォーテーションの場合
+UNLOAD( 'SELECT * FROM schema_name.TARGET_TABLE' )
+    TO 's3://S3パス/TARGET_TABLE'
+    CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
+    DELIMITER ',' GZIP ADDQUOTES ALLOWOVERWRITE;
+ ↓
+COPY schema_name.TARGET_TABLE FROM 's3://S3パス/TARGET_TABLE'
+    CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
+    GZIP DELIMITER ',' REMOVEQUOTES DATEFORMAT 'auto' IGNOREHEADER 1;
 
 
-
-■ S3から復旧 （OracleでCSV出力した場合）
-
-COPY schema.TARGET_TABLE
-FROM 's3://Ｓ３パス/TARGET_TABLE.csv.gz' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' CSV GZIP DELIMITER ',' IGNOREHEADER 1 DATEFORMAT 'auto' TIMEFORMAT 'auto';
-
-  注意点
-    デリミタ          DELIMITER '\t'   DELIMITER ','
-    ヘッダ行あり      IGNOREHEADER 1
-    日付フォーマット  DATEFORMAT 'auto' TIMEFORMAT 'auto'
-    改行コード        \n
-    ファイル名        大文字、小文字を区別する
-
-
-
-
-■ S3へ退避、S3から復旧 （一般）
 
   ADDQUOTES             ダブルクォーテーションをつける  → 読み込む際は、REMOVEQUOTES  が必要
   ALLOWOVERWRITE        S3ファイル上書きする
   DELIMITER ','         デリミタ
   PARALLEL OFF          通常(省略)時はON。 OFFの場合、6.2GBまで1つのファイルに出力する。時間がかかる
 
-  ※ヘッダは出力されない!!!
-
-○デリミタ = タブの場合
-UNLOAD($$ SELECT * FROM schema.TARGET_TABLE $$)
-TO 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' DELIMITER '\t' GZIP ALLOWOVERWRITE;
-  ↓
-COPY schema.TARGET_TABLE FROM 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' GZIP DELIMITER '\t' DATEFORMAT 'auto';"
+  デリミタ               DELIMITER '\t'   DELIMITER ','
+  ヘッダ行あり           IGNOREHEADER 1
+  日付フォーマット       DATEFORMAT 'auto' TIMEFORMAT 'auto'
+  改行コード             \n
+  ファイル名             大文字、小文字を区別する
 
 
-○デリミタ = カンマ、ダブルクォーテーションの場合
-UNLOAD($$ SELECT * FROM schema.TARGET_TABLE $$)
-TO 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' DELIMITER ',' GZIP ADDQUOTES ALLOWOVERWRITE;
-  ↓
-COPY schema.TARGET_TABLE FROM 's3://Ｓ３パス/TARGET_TABLE' CREDENTIALS 'aws_access_key_id=XXX;aws_secret_access_key=XXX' GZIP DELIMITER ',' REMOVEQUOTES DATEFORMAT 'auto';"
 
+■ SQLファイル実行
+
+nohup psql -h XXXX.amazonaws.com -U ユーザ -d DB名 -p ポート -f ./test.sql > test.log &
+
+
+
+■Redshift SQL引数渡し
+
+psql -h XXXX.amazonaws.com -U ユーザ -d DB名 -p ポート -f 
+  test.sql -v SCHEMA=schema_name -v TBL=table_name -v S3FILE="'s3://S3パス/ファイル名'"
+
+test.sql
+--------------------------------------
+TRUNCATE TABLE :SCHEMA.:TBL;
+COPY :SCHEMA.:TBL
+FROM :S3FILE gzip credentials 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'  REMOVEQUOTES DELIMITER ',' IGNOREHEADER 1;
+COMMIT;
+--------------------------------------
+
+
+■ Oracle → Redshift テーブル定義変換
+
+numeric          (decimal)  小数点前までは131,072桁、小数点以降は16,383桁
+smallint         (int2)      5桁                    -32,768 ～                    +32,767
+integer          (int,int4) 10桁             -2,147,483,648 ～             +2,147,483,647
+bigint           (int8)     19桁 -9,223,372,036,854,775,808 ～ +9,223,372,036,854,775,807
+real             (float4)    6桁精度
+double precision (float8)   15桁精度
+
+
+
+■テーブル作成(元をコピー:圧縮エンコード含む)
+
+create table new_table (like  src_table); 
+
+
+■テーブルカラム圧縮エンコード
+http://docs.aws.amazon.com/ja_jp/redshift/latest/dg/r_ANALYZE_COMPRESSION.html
+
+1. analyze compression スキーマ.テーブル名;
+2. 上記結果で新テーブル定義作成
+3. バックアップ(unload)
+4. テーブル再作成  (drop table → create table)
+5. バックアップ戻し
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------
+-- EC2, Linux
+--------------------------------------------------------------------------------------------------------
+■ ファイル一覧、検索
+
+S3 検索
+aws s3 ls s3://S3パス/ --recursive | grep 'SEARCH_WORD' > result.txt
+
+
+grep
+-i 大文字小文字区別しない
+-E 正規表現
+-a テキストファイルとして検索(バイナリではなく)
+
+
+S3 リスト作成
+aws s3 ls s3://S3パス/ --recursive --human-readable --summarize > s3list.txt
+
+
+EC2 検索
+find /home/user1 -type f -iregex ".*SEARCH_WORD.*" | xargs ls -l --time-style=+%Y-%m-%d\ %H:%M:%S > result.txt
+
+find /home/user1/aaaa/ -type f -iregex ".*SEARCH_WORD.*" | xargs ls -l --time-style=+%Y-%m-%d\ %H:%M:%S > result.txt
+
+
+
+-iregex  大文字小文字区別しない 正規表現
+
+xargs 実行
 
 
 
 ■ S3 <-> EC2 コピー
-
-S3パスの全ファイルをEC2にコピー
-aws s3 cp [S3パス]/ . --recursive
-
-特定ファイルをEC2にコピー
-aws s3 cp [S3パス]/特定ファイル .
-
-EC2のファイルをS3にコピー
-aws s3 cp testfile [S3パス]
-
 
 ローカルからS3にコピー
 aws s3 cp <LocalPath> <S3Path>
@@ -97,18 +132,22 @@ aws s3 cp <S3Path> <LocalPath>
 S3からS3にコピー
 aws s3 cp <S3Path> <S3Path>
 
-
-■ SQL実行
-
-psql -h ホスト名 -U ユーザ名 -d DB名 -p ポート -f ./test.sql >& test.log&
-
-psql -h XXXX.amazonaws.com -U user1 -d db1 -p 1234 -f ./test.sql >& test.log&
+キー情報が必要な場合
+AWS_ACCESS_KEY_ID=xxxx AWS_SECRET_ACCESS_KEY=xxxx aws s3 cp test.txt s3://my-bucket/
 
 
+■SQLエラー時の戻り値セット
+WHENEVER OSERROR EXIT 2;
+WHENEVER SQLERROR EXIT 1;
+
+sqlplusでエラー  ->  sqlret にエラーメッセージ  ただし、ret=0
+SQLがエラー      ->  ret>0 かつ csvtail にエラーメッセージ
 
 
+■ ファイルの最終行を削除する
+$ tail -n4 data.csv
+ERROR:
+ORA-00028: セッションは強制終了されました。
 
 
-
-
-
+$ head -n -4 data.csv > data_new.csv

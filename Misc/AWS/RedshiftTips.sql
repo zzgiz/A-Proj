@@ -3,7 +3,9 @@ select
     table_name
   , ordinal_position
   , column_name
-  , udt_name
+  , case
+        when udt_name like 'int%' then data_type else udt_name
+    end as type
   , case
         when udt_name = 'varchar' then character_maximum_length::text
         when udt_name = 'numeric' then (numeric_precision || ',' || numeric_scale)::text
@@ -25,8 +27,13 @@ and viewname     = 'view1'
 -- and definition like '%search_word%'
 order by viewname;
 
+
 -- カラム名検索
-SELECT *
+SELECT
+    table_schema
+  , table_name
+  , column_name
+  , case when udt_name like 'int%' then data_type else udt_name end as type
 FROM information_schema.columns
 where 1=1
 --and table_schema= 'schema_name'
@@ -34,6 +41,7 @@ and column_name like 'colum1'
 -- and is_nullable = 'NO'
 -- and udt_name='date'
 order by table_schema, table_name;
+
 
 -- テーブル名検索
 SELECT table_schema, table_name
@@ -157,7 +165,7 @@ ORDER BY
 
 
 -- カウント文作成
-SELECT '(select count(*) from '  || table_schema || '.' || table_name || ') as ' || table_name || ',' as "select"
+SELECT '(select to_char(count(*), ''999,999,999,999'') from '  || table_schema || '.' || table_name || ') as ' || table_name || ',' as "select"
 from (
     SELECT distinct table_schema, table_name
     FROM information_schema.columns 
