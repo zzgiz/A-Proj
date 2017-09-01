@@ -3,16 +3,14 @@ select
     table_name
   , ordinal_position
   , column_name
+  , case when udt_name like 'int%' then data_type else udt_name end as type
   , case
-        when udt_name like 'int%' then data_type else udt_name
-    end as type
-  , case
-        when udt_name = 'varchar' then character_maximum_length::text
-        when udt_name = 'numeric' then (numeric_precision || ',' || numeric_scale)::text
-        else null::text
+        when udt_name = 'varchar' then '(' || character_maximum_length::text || ')'
+        when udt_name = 'numeric' then '(' || (numeric_precision || ',' || numeric_scale)::text || ')'
+        else ''::text
     end as data_length
   , case when is_nullable='NO' then 'NOT NULL' else '' end as null_able
-  , column_default
+  , case when column_default is not null then column_default else '' end column_default
 from information_schema.columns 
 where 
     table_catalog   = 'db_name'
