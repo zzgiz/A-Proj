@@ -512,6 +512,26 @@ Private Function CnvAdr(row As Long, col As Long) As String
 End Function
 
 ' -----------------------------------------------------------------
+' 対象範囲から指定項目を検索し行位置を返す
+' -----------------------------------------------------------------
+Public Function FindRow(ByRef rng As Range, key As Variant) As Long
+
+    Dim row As Long
+
+    FindRow = 0
+    
+    On Error GoTo Err1
+
+    row = Application.WorksheetFunction.Match(CStr(key), rng, 0)
+    
+    FindRow = row
+    
+Err1:
+    ' エラー = 検索結果なし
+    
+End Function
+
+' -----------------------------------------------------------------
 ' 初期化
 ' -----------------------------------------------------------------
 Private Function Initial() As Variant
