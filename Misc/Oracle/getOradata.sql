@@ -1,0 +1,26 @@
+/*
+-- sqlplus user/pass@service @./getOradata.sql
+*/
+
+SET ARRAYSIZE 500
+SET FLUSH OFF
+SET LINESIZE 32767
+SET PAGESIZE 0
+SET SERVEROUTPUT OFF
+SET FEEDBACK OFF
+SET TERMOUT OFF
+SET TRIMSPOOL ON
+SET VERIFY OFF
+SET HEADING ON
+SET UNDERLINE OFF
+ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS';
+
+spool ./rst.txt
+
+
+select wk, count(wk) from table_1 group by wk order by wk;
+
+
+spool off
+quit
+
