@@ -29,8 +29,10 @@ if [ ${#} -ge 3 ]; then
 else
   PROC_END=4
 fi
+
 MAIN_LOG="ora2red.log"
 DAY_DT=`date -u -d '9 hours' +%Y%m%d`
+S3SUBDIR="latest_part"
 
 if [ ${TYP} = 'S1' ]; then
   # 1
@@ -41,7 +43,7 @@ if [ ${TYP} = 'S1' ]; then
   SCHEMA="schema_1"
 
 elif [ ${TYP} = 'S2' ]; then
-  # 1
+  # 2
   ORA_USR="ORACLE_USER_2"
   ORA_PAS="XXXX"
   ORA_HST="ORACLE_HOST_NAME_or_HOST_ADDRESS"
@@ -111,7 +113,7 @@ if [ -e ./csv/${DAY_DT}/${TBL}.csv.gz ]; then
 fi
 gzip ./csv/${DAY_DT}/${TBL}.csv
 
-aws s3 cp ./csv/${DAY_DT}/${TBL}.csv.gz ${S3PATH}/${DAY_DT}/${TBL}.csv.gz 1>/dev/null 2>>${MAIN_LOG}
+aws s3 cp ./csv/${DAY_DT}/${TBL}.csv.gz ${S3PATH}/${DAY_DT}/${S3SUBDIR}/${TBL}.csv.gz 1>/dev/null 2>>${MAIN_LOG}
 ret=$?
 if [ ${ret} -gt 0 ]; then
   log "ERROR : S3転送エラー"
@@ -126,23 +128,17 @@ fi
 ## 4.Redshiftに投入
 # テーブル存在チェック
 TBL_LW=`echo ${TBL} | tr [A-Z] [a-z]`
-ret=`psql -h XXXXX.redshift.amazonaws.com -U DBユーザ -d DB名 -p ポート -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='"${SCHEMA}"' AND table_name='"${TBL_LW}"';"` 1>/dev/null 2>>${MAIN_LOG}
+ret=`psql -h XXXXX.redshift.amazonaws.com -U ユーザ -d DB名 -p ポート -c \
+  "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='"${SCHEMA}"' AND table_name='"${TBL_LW}"';"` 1>/dev/null 2>>${MAIN_LOG}
+
 if [ `echo ${ret} | cut -d' ' -f3` -eq 0 ]; then
     log "テーブル未定義。S3保存で終了"
     exit 0
 fi
 
-# データ削除 (※個別SQL使用)
-psql -h XXXXX.redshift.amazonaws.com -U DBユーザ -d DB名 -p ポート -f ./sql/del_${TBL}.sql -v SCHEMA=${SCHEMA} -v TBL=${TBL} 1>/dev/null 2>>${MAIN_LOG}
-ret=$?
-if [ ${ret} -gt 0 ]; then
-  log "ERROR : DELETEエラー"
-  exit 1
-fi
-
-# 投入
-psql -h XXXXX.redshift.amazonaws.com -U DBユーザ -d DB名 -p ポート -c \
-  "copy ${SCHEMA}.${TBL} from '${S3PATH}/${DAY_DT}/${TBL}.csv.gz' CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX' GZIP CSV IGNOREHEADER 1 DELIMITER ',' DATEFORMAT 'auto';" \
+# データ投入 (※個別SQL使用)
+psql -h ホスト.amazonaws.com -U ユーザ -d DB名 -p ポート -f \
+  ./sql/set_${TBL}.sql -v SCHEMA=${SCHEMA} -v TBL=${TBL_LW} -v S3FILE="'${S3PATH}/${DAY_DT}/${S3SUBDIR}/${TBL}.csv.gz'" \
   1>/dev/null 2>>${MAIN_LOG}
 ret=$?
 if [ ${ret} -gt 0 ]; then
@@ -150,6 +146,30 @@ if [ ${ret} -gt 0 ]; then
   exit 1
 fi
 
-log "End! ---------------"
+# 最新状態をバックアップ & 全件洗い替え
+psql -h ホスト.amazonaws.com -U ユーザ -d DB名 -p ポート -c \
+  "UNLOAD( 'SELECT * FROM ${SCHEMA}.${TBL_LW}' ) TO '${S3PATH}/${DAY_DT}/${TBL_LW}.tsv' CREDENTIALS 'aws_access_key_id=XXXX;aws_secret_access_key=XXXX' DELIMITER '\t' ESCAPE GZIP ALLOWOVERWRITE;" \
+   1>/dev/null 2>>${MAIN_LOG}
+ret=$?
+if [ ${ret} -gt 0 ]; then
+  log "ERROR : バックアップエラー"
+  exit 1
+fi
+
+psql -h ホスト.amazonaws.com -U ユーザ -d DB名 -p ポート -c \
+  "TRUNCATE TABLE ${SCHEMA}.${TBL_LW};" \
+  1>/dev/null 2>>${MAIN_LOG}
+
+psql -h ホスト.amazonaws.com -U ユーザ -d DB名 -p ポート -c \
+  "COPY ${SCHEMA}.${TBL_LW} FROM '${S3PATH}/${DAY_DT}/${TBL_LW}.tsv' CREDENTIALS 'aws_access_key_id=XXXX;aws_secret_access_key=XXXX' DELIMITER '\t' ESCAPE GZIP DATEFORMAT 'auto';" \
+   1>/dev/null 2>>${MAIN_LOG}
+
+
+
+## csv過去データ削除
+find ./csv -type d -mtime +30 -print | xargs -r rm -rf
+
+
+log "Succeeded! ---------"
 exit 0
 

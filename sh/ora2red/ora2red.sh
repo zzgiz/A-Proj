@@ -145,6 +145,11 @@ if [ ${ret} -gt 0 ]; then
   exit 1
 fi
 
-log "End! ---------------"
+
+## csv過去データ削除
+find ./csv -type d -mtime +30 -print | xargs -r rm -rf
+
+
+log "Succeeded! ---------"
 exit 0
 

@@ -108,8 +108,8 @@ do
     csvtail=`tail ./csv/${DAY_DT}/${TBL}_${prtnm}.csv | grep -i 'ora\-[0-9]'`
     log "ERROR : データ取得エラー"
     echo "${csvtail}" >> ${MAIN_LOG}
-    #exit 1
-    continue
+    exit 1
+    #continue
   fi
   
   if [ -e ./csv/${DAY_DT}/${TBL}_${prtnm}.csv.gz ]; then
@@ -123,8 +123,8 @@ do
     ret=$?
     if [ ${ret} -gt 0 ]; then
       log "ERROR : S3転送エラー"
-      #exit 1
-      continue
+      exit 1
+      #continue
     fi
   fi
 
@@ -174,6 +174,11 @@ if [ ${ret} -gt 0 ]; then
   exit 1
 fi
 
-log "End! ---------------"
+
+## csv過去データ削除
+find ./csv -type d -mtime +30 -print | xargs -r rm -rf
+
+
+log "Succeeded! ---------"
 exit 0
 
