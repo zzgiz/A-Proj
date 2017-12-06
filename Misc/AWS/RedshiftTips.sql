@@ -1,7 +1,8 @@
 -- テーブル定義
 select
     table_name
-  , ordinal_position
+--  , case when ordinal_position = 1 then 'CREATE TABLE ' || table_schema || '.' || table_name || ' (' else '  , ' end text1
+--  , ordinal_position
   , column_name
   , case when udt_name like 'int%' then data_type else udt_name end as type
   , case
@@ -10,7 +11,7 @@ select
         else ''::text
     end as data_length
   , case when is_nullable='NO' then 'NOT NULL' else '' end as null_able
-  , case when column_default is not null then column_default else '' end column_default
+  , case when column_default is not null then 'DEFAULT ' || column_default else '' end column_default
 from information_schema.columns 
 where 
     table_catalog   = 'db_name'
@@ -60,7 +61,7 @@ SELECT DISTINCT table_schema, table_name, table_type
 FROM information_schema.tables tab
 where table_schema = 'schema_name'
 and table_name in ('tbl1','tbl2')
-order by table_type, table_name
+order by table_schema, table_type, table_name
 ;
 
 
@@ -83,11 +84,12 @@ ORDER BY l.pid;
 
 
 -- 実行中のクエリ確認
-select pid,
-       trim(user_name),
-	   starttime +INTERVAL '9 hours' AS starttime,
-       -- SYSDATE-starttime AS elapsed_time,
-       trim(query)
+select
+    pid
+  , trim(user_name)
+  , starttime +INTERVAL '9 hours' AS starttime
+  , (SYSDATE - starttime) +INTERVAL '9 hours' AS elapsed_time
+  , trim(query)
 from stv_recents
 where status='Running';
 
@@ -184,5 +186,15 @@ order by endtime desc;
 select * from STL_DDLTEXT 
 where text like '%abcdefg%'
 order by endtime desc;
+
+
+-- 個別
+select *
+  , to_char(trunc(mod(date_diff('sec', start_time, finish_time)/60/60, 60)), '00') || ':' ||
+    to_char(trunc(mod(date_diff('sec', start_time, finish_time)/60, 60)), '00')    || ':' ||
+    to_char(mod(date_diff('sec', start_time, finish_time), 60), '00')              as elapsed
+from schema1.data_imp_log
+where 1=1
+order by finish_time desc;
 
 

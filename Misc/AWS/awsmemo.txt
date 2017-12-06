@@ -3,45 +3,48 @@
 --------------------------------------------------------------------------------------------------------
 ■ S3 <-> Redshift
 
+★TSVは、UTF-8 LF
+
 ○デリミタ = タブの場合
 UNLOAD( 'SELECT * FROM schema_name.TARGET_TABLE' )
-    TO 's3://S3パス/TARGET_TABLE'
+    TO 's3://S3パス/TARGET_TABLE.tsv'
     CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
-    DELIMITER '\t' GZIP ALLOWOVERWRITE;
+    DELIMITER '\t' ESCAPE GZIP ALLOWOVERWRITE;
  ↓
-COPY schema_name.TARGET_TABLE FROM 's3://S3パス/TARGET_TABLE'
+COPY schema_name.TARGET_TABLE FROM 's3://S3パス/TARGET_TABLE.tsv'
     CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
-    GZIP DELIMITER '\t' DATEFORMAT 'auto';
+    DELIMITER '\t' ESCAPE GZIP DATEFORMAT 'auto';
 
 
 ○デリミタ = カンマ、ダブルクォーテーションの場合
 UNLOAD( 'SELECT * FROM schema_name.TARGET_TABLE' )
-    TO 's3://S3パス/TARGET_TABLE'
+    TO 's3://S3パス/TARGET_TABLE.csv'
     CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
     DELIMITER ',' GZIP ADDQUOTES ALLOWOVERWRITE;
  ↓
-COPY schema_name.TARGET_TABLE FROM 's3://S3パス/TARGET_TABLE'
+COPY schema_name.TARGET_TABLE FROM 's3://S3パス/TARGET_TABLE.csv'
     CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX'
     GZIP DELIMITER ',' REMOVEQUOTES DATEFORMAT 'auto' IGNOREHEADER 1;
 
 
-
   ADDQUOTES             ダブルクォーテーションをつける  → 読み込む際は、REMOVEQUOTES  が必要
+  ESCAPE                区切り文字が含まれる場合にエスケープされる。読み込む際も必要
   ALLOWOVERWRITE        S3ファイル上書きする
-  DELIMITER ','         デリミタ
+  DELIMITER ','         DELIMITER '\t'
   PARALLEL OFF          通常(省略)時はON。 OFFの場合、6.2GBまで1つのファイルに出力する。時間がかかる
+  IGNOREHEADER 1        ヘッダ行あり(1行)
+  DATEFORMAT 'auto'     日付フォーマット
+  TIMEFORMAT 'auto'     時間フォーマット
 
-  デリミタ               DELIMITER '\t'   DELIMITER ','
-  ヘッダ行あり           IGNOREHEADER 1
-  日付フォーマット       DATEFORMAT 'auto' TIMEFORMAT 'auto'
-  改行コード             \n
-  ファイル名             大文字、小文字を区別する
-
+  ※ファイル名は、大文字、小文字を区別する
+  ※改行コードは、\n にする
+  ※文字コードは、UTF-8にする
+  ※CSVからのコピー時、CSVのパラメータを外して、REMOVEQUOTESを追加すれば成功する場合がある
 
 
 ■ SQLファイル実行
 
-nohup psql -h XXXX.amazonaws.com -U ユーザ -d DB名 -p ポート -f ./test.sql > test.log &
+psql -h XXXXX.redshift.amazonaws.com -U db_user1 -d db_name1 -p 1234 -f ./test.sql > test.log &
 
 
 
@@ -75,17 +78,33 @@ double precision (float8)   15桁精度
 create table new_table (like  src_table); 
 
 
-■テーブルカラム圧縮エンコード
+■圧縮エンコード
 http://docs.aws.amazon.com/ja_jp/redshift/latest/dg/r_ANALYZE_COMPRESSION.html
 
-1. analyze compression スキーマ.テーブル名;
-2. 上記結果で新テーブル定義作成
-3. バックアップ(unload)
-4. テーブル再作成  (drop table → create table)
-5. バックアップ戻し
+1. analyze compression テーブル名
+2. unload
+3. drop table
+4. create new table
+5. load
 
 
+■ 時間差の計算
+select
+    tbl_name
+  , start_time
+  , finish_time
+  , to_char(trunc(mod(date_diff('sec', start_time, finish_time)/60/60, 60)), '00') || ':' ||
+    to_char(trunc(mod(date_diff('sec', start_time, finish_time)/60, 60)), '00')    || ':' ||
+    to_char(mod(date_diff('sec', start_time, finish_time), 60), '00')              as elapsed
+from  ログテーブル
+order by
+    tbl_name
+  , start_time;
 
+
+■ テーブル権限
+
+GRANT SELECT ON schema_1.table_a TO abc_developer;
 
 
 
@@ -151,3 +170,47 @@ ORA-00028: セッションは強制終了されました。
 
 
 $ head -n -4 data.csv > data_new.csv
+
+
+■ ファイルの行数カウント
+
+wc -l ファイル名
+
+
+■ 1か月前のファイルを削除する
+
+find ./hoge/log -name '*.log' -mtime +30 -delete
+
+find ./hoge/log -name '*.log' -mtime +30 | xargs -r rm
+
+find ./hoge -type d -mtime +30 -print | xargs -r rm -rf
+↑ -printは最後でないとダメ
+
+
+■ 日付
+
+# 日本時間
+date -u -d '9 hours' '+%Y-%m-%d %H:%M:%S'
+
+# 日本時間で3日前
+date -u -d '9 hours -3 day' '+%Y%m%d'
+
+# 3日前
+date -d '-3 day'
+
+# 指定フォーマットで表示
+date +"%Y/%m/%d %p %H:%M:%S"
+
+
+■ バックグラウンドのプロセスをキル
+
+psの結果をsedで整形しPIDを取得して、それをkill
+
+ps | grep pty0 | sed -E 's/ +/ /g' | cut -d' ' -f2 | xargs kill -9
+ps | grep pty0 | sed -E 's/ +/ /g' | cut -d' ' -f2 | xargs -I {} sh -c 'kill -9 {}'
+
+
+過去ログを削除
+find ./log -maxdepth 1 -name '*.log' -mtime +15 -print | xargs -I {} sh -c 'gzip {} && mv {}.gz ./log/_old/'
+
+
