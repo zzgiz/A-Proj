@@ -32,3 +32,11 @@ psql -h ホスト名 -U ユーザ名 -d ＤＢ名 -p ポート -c "truncate tabl
 psql -h ホスト名 -U ユーザ名 -d ＤＢ名 -p ポート -c "copy schema.${1} from 's3://Ｓ３のアドレス/${TODAY}/${1}.csv.gz' gzip CSV IGNOREHEADER 1 credentials 'aws_access_key_id=アクセスキー; aws_secret_access_key=秘密鍵' delimiter ',' dateformat 'auto';"
 
 
+# 過去ログ退避(15日以前)、過去データ削除(15日以前)
+LOG_DT=`find ./log -maxdepth 1 -name '*.log' -mtime +15 -print | head -1 | cut -c14-21`
+if [ ! -z "${LOG_DT}" ]; then
+  cd ./log
+  find -maxdepth 1 -name '*.log' -mtime +15 -print | tar -cz -T - -f ./_old/log_"${LOG_DT}".tar.gz --remove-files
+  cd ../
+fi
+find ./csv -type d -mtime +15 -print | xargs -r rm -rf

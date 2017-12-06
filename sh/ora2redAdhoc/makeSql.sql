@@ -18,7 +18,29 @@ SPOOL ./sql/get_&1..sql
 
 prompt SET ARRAYSIZE 500
 prompt SET FLUSH OFF
-prompt SET LINESIZE 32767
+SELECT
+    -- LINESIZE最適値取得
+    'SET LINESIZE ' ||
+        SUM(
+            CASE
+                WHEN (base_size + commna_size + date_size + delim_size) > col_name_len
+                THEN (base_size + commna_size + date_size + delim_size)
+                ELSE col_name_len
+            END
+        )
+FROM (
+    SELECT
+        column_name
+      , NVL(data_precision, data_length)                AS base_size
+      , CASE WHEN data_scale>0 THEN 1 ELSE 0 END        AS commna_size  -- 小数点有無
+      , CASE WHEN data_type = 'DATE' THEN 13 ELSE 0 END AS date_size    -- DATE型(20桁)
+      , 3                                               AS delim_size   -- デリミタ(",")
+      , LENGTH(column_name) + 1                         AS col_name_len -- 項目名
+    FROM
+        user_tab_columns
+    WHERE
+        table_name = '&1'
+);
 prompt SET PAGESIZE 0
 prompt SET SERVEROUTPUT OFF
 prompt SET FEEDBACK OFF
