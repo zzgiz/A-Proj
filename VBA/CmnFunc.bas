@@ -3,6 +3,23 @@ Option Explicit
 Option Private Module
 
 ' -----------------------------------------------------------------
+' 最終行列取得
+' -----------------------------------------------------------------
+Public Function GetEndPos(sh As Worksheet) As Variant
+
+    Dim lastRow As Long
+    Dim lastCol As Long
+
+    With sh.UsedRange
+        lastRow = .Rows(.Rows.Count).row
+        lastCol = .Columns(.Columns.Count).Column
+    End With
+
+    GetEndPos = sh.Range(sh.Cells(lastRow, lastCol), sh.Cells(lastRow, lastCol))
+
+End Function
+
+' -----------------------------------------------------------------
 ' ブックのオープン確認
 ' -----------------------------------------------------------------
 Public Function IsBookOpen(fileName As String) As Boolean
@@ -116,26 +133,6 @@ ERR1:
 End Function
 
 ' -----------------------------------------------------------------
-' 日付チェック
-' -----------------------------------------------------------------
-Public Function IsDateVal(src As Variant) As Boolean
-       
-    On Error GoTo ERR1
-    
-    If IsDate(src) Then
-        If DateValue(src) > 0 Then
-            IsDateVal = True
-        End If
-    End If
-    
-    Exit Function
-
-ERR1:
-    IsDateVal = False
-
-End Function
-
-' -----------------------------------------------------------------
 ' 文字列チェック
 ' -----------------------------------------------------------------
 Public Function IsStrVal(src As Variant) As Boolean
@@ -155,23 +152,27 @@ ERR1:
 End Function
 
 ' -----------------------------------------------------------------
-' 集約コードの妥当性をチェック
+' 日付チェック
 ' -----------------------------------------------------------------
-Public Function ChkSlsSumCd(src As Variant) As Boolean
-
+Public Function IsDateVal(src As Variant) As Boolean
+       
     On Error GoTo ERR1
-
-    If IsNumeric(src) Then
-        If src > 0 Then
-            ChkSlsSumCd = True
+    
+    Dim tmp As Variant
+    
+    tmp = CnvDateVal(src)
+    
+    If IsDate(tmp) Then
+        If DateValue(tmp) > 0 Then
+            IsDateVal = True
         End If
     End If
-
+    
     Exit Function
-    
+
 ERR1:
-    ChkSlsSumCd = False
-    
+    IsDateVal = False
+
 End Function
 
 ' -----------------------------------------------------------------
@@ -179,18 +180,32 @@ End Function
 ' -----------------------------------------------------------------
 Public Function CnvDateVal(src As Variant) As Variant
 
-    CnvDateVal = ""     ' 戻り値
+    On Error GoTo ERR1
 
-    If IsDateVal(src) Then
-        CnvDateVal = src
+    Dim rst As Variant
+    
+    rst = src
+    
+    If InStr(src, "/") <= 0 And InStr(src, "-") <= 0 Then
+        If Len(src) = 8 Then
+            rst = Left(src, 4) & "/" & Mid(src, 5, 2) & "/" & Right(src, 2)
+        ElseIf Len(src) = 6 Then
+            rst = "20" & Left(src, 2) & "/" & Mid(src, 3, 2) & "/" & Right(src, 2)  ' 2000年代固定
+        Else
+            rst = ""
+        End If
     End If
+    
+    
+ERR1:
+    CnvDateVal = rst
 
 End Function
 
 ' -----------------------------------------------------------------
 ' 余分な空白の除去
 ' -----------------------------------------------------------------
-Public Function DeleteSP(str As String) As String
+Public Function RmvSP(str As String) As String
 
     Dim reg As Object
     
@@ -201,7 +216,21 @@ Public Function DeleteSP(str As String) As String
         .Global = True
     End With
     
-    DeleteSP = reg.Replace(str, " ")
+    RmvSP = reg.Replace(str, " ")
+
+End Function
+
+' -----------------------------------------------------------------
+' 余分な改行の除去
+' -----------------------------------------------------------------
+Public Function RmvCRLF(str As String) As String
+
+    Dim rst As String
+
+    rst = Replace(str, vbLf, " ")
+    rst = Replace(rst, vbCr, " ")
+
+    RmvCRLF = rst
 
 End Function
 
@@ -410,7 +439,7 @@ Public Sub SavePics()
 
         ' ファイル名取得
         fname = Trim(tgtSh.Cells(sp.TopLeftCell.row, sp.TopLeftCell.Column - 1).Value)
-        if fname = "" Then
+        If fname = "" Then
             GoTo NEXT_SHAPE
         End If
         
