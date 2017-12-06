@@ -3,8 +3,8 @@
 
 git config --global user.useConfigOnly true
 
-git config --local user.name "zzgiz"
-git config --local user.email "zzninja@gmail.com"
+git config --local user.name "ユーザ名"
+git config --local user.email "メールアドレス"
 
 
 その他初期設定
