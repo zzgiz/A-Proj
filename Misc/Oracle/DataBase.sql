@@ -45,11 +45,6 @@ ORDER BY
 SELECT
     tbl.TABLE_NAME
   , col.COLUMN_ID
-  , CASE
-        WHEN pk.COLUMN_POSITION IS NOT NULL
-        THEN pk.COLUMN_POSITION
-        ELSE NULL
-    END AS "PK"
   , col.COLUMN_NAME
   , col.DATA_TYPE
   , CASE
@@ -57,6 +52,11 @@ SELECT
         THEN '(' || col.DATA_PRECISION || ',' || col.DATA_SCALE || ')'
         ELSE '(' || TO_CHAR(col.DATA_LENGTH) || ')'
     END AS "LENGTH"
+  , CASE
+        WHEN pk.COLUMN_POSITION IS NOT NULL
+        THEN to_char(pk.COLUMN_POSITION)
+        ELSE '-'
+    END AS "PK"
   , CASE
         WHEN col.NULLABLE = 'Y'
         THEN 'N'
@@ -142,7 +142,7 @@ select
   , LAST_ANALYZED
 from USER_TAB_SUBPARTITIONS
 where table_name = :TABLE_NAME
-order by PARTITION_NAME, SUBPARTITION_NAME;
+order by b.TABLE_NAME, a.PARTITION_POSITION, b.SUBPARTITION_POSITION;
 
 -- インデックス情報
 select
@@ -166,6 +166,24 @@ SELECT
   , BYTES/1024/1024/1024 AS G_BYTES
 FROM DBA_SEGMENTS
 WHERE SEGMENT_NAME = :TABLE_NAME;
+
+-- テーブル容量 - パーティション合計
+SELECT
+    OWNER
+  , SEGMENT_NAME
+  , SUM(BYTES/1024/1024/1024)   AS G_BYTES
+  , SUM(BYTES/1024/1024)        AS M_BYTES
+FROM DBA_SEGMENTS
+WHERE 1=1
+and SEGMENT_NAME = :TABLE_NAME
+--and BYTES > 8388608
+GROUP BY
+    SEGMENT_NAME
+  , OWNER
+ORDER BY
+    SEGMENT_NAME
+  , OWNER
+;
 
 -- シーケンステスト
 /*
@@ -222,10 +240,10 @@ order by dt desc;
 -- テーブル定義変換 Oralce → Redshift
 SELECT
     CASE
-        WHEN COLUMN_ID = 1 THEN 'CREATE TABLE schema_name.' || LOWER(TABLE_NAME) || ' (' 
-        ELSE '  , '
+        WHEN COLUMN_ID = 1 THEN 'CREATE TABLE schema1.' || LOWER(TABLE_NAME) || ' (' 
+        ELSE ','
     END AS MARK1
-  , LOWER(COLUMN_NAME) || ' ' AS column_name
+  , LOWER(COLUMN_NAME) AS column_name
   , CASE
         WHEN DATA_TYPE = 'VARCHAR2' THEN 'varchar'
         WHEN DATA_TYPE = 'NUMBER'   THEN 'numeric'
@@ -254,6 +272,7 @@ FROM (
       , col.NULLABLE
     FROM
         USER_TABLES tbl
+--        DBA_TABLES tbl
     INNER JOIN USER_TAB_COLUMNS col
     ON
         tbl.TABLE_NAME = col.TABLE_NAME
