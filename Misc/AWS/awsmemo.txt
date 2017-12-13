@@ -213,4 +213,7 @@ ps | grep pty0 | sed -E 's/ +/ /g' | cut -d' ' -f2 | xargs -I {} sh -c 'kill -9 
 過去ログを削除
 find ./log -maxdepth 1 -name '*.log' -mtime +15 -print | xargs -I {} sh -c 'gzip {} && mv {}.gz ./log/_old/'
 
+SJISをUTF変換しながらtail
+tail -f lev_log.txt | while read LINE ; do echo $LINE | iconv -f SJIS -t UTF-8 ; done
+
 
