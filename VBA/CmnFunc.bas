@@ -371,6 +371,30 @@ Err_1:
 End Function
 
 ' -----------------------------------------------------------------
+' 動作ログ出力(外部ファイル 時間出力無し)
+' -----------------------------------------------------------------
+Public Function OutLogNT(fname As String, msg As String)
+
+    Dim fd As Long
+    Dim logfile As String
+
+    On Error GoTo Err_1
+
+    logfile = ActiveWorkbook.path & "\" & fname
+
+    fd = FreeFile()
+
+    Open logfile For Append As fd
+    Print #fd, msg
+    Close #fd
+
+    Exit Function
+
+Err_1:
+
+End Function
+
+' -----------------------------------------------------------------
 ' 動作ログ出力
 ' -----------------------------------------------------------------
 Public Function SetProcessLog(sh As Worksheet, adr As String, msg As String)
