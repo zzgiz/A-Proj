@@ -5,7 +5,7 @@ Option Private Module
 ' -----------------------------------------------------------------
 ' 最終行列取得
 ' -----------------------------------------------------------------
-Public Function GetEndPos(sh As Worksheet) As Variant
+Public Function GetEndRng(ByRef sh As Worksheet) As Range
 
     Dim lastRow As Long
     Dim lastCol As Long
@@ -14,8 +14,8 @@ Public Function GetEndPos(sh As Worksheet) As Variant
         lastRow = .Rows(.Rows.Count).row
         lastCol = .Columns(.Columns.Count).Column
     End With
-
-    GetEndPos = sh.Range(sh.Cells(lastRow, lastCol), sh.Cells(lastRow, lastCol))
+    
+    Set GetEndRng = sh.Range(sh.Cells(lastRow, lastCol).Address)
 
 End Function
 
@@ -117,7 +117,7 @@ End Function
 ' -----------------------------------------------------------------
 Public Function IsNumVal(ByVal val As Variant) As Boolean
        
-    On Error GoTo ERR1
+    On Error GoTo Err1
     
     Dim dbl As Double
     
@@ -127,7 +127,7 @@ Public Function IsNumVal(ByVal val As Variant) As Boolean
     
     Exit Function
 
-ERR1:
+Err1:
     IsNumVal = False
 
 End Function
@@ -137,7 +137,7 @@ End Function
 ' -----------------------------------------------------------------
 Public Function IsStrVal(src As Variant) As Boolean
        
-    On Error GoTo ERR1
+    On Error GoTo Err1
     
     Dim tmp As String
     tmp = CStr(src)
@@ -146,7 +146,7 @@ Public Function IsStrVal(src As Variant) As Boolean
     
     Exit Function
 
-ERR1:
+Err1:
     IsStrVal = False
 
 End Function
@@ -156,7 +156,7 @@ End Function
 ' -----------------------------------------------------------------
 Public Function IsDateVal(src As Variant) As Boolean
        
-    On Error GoTo ERR1
+    On Error GoTo Err1
     
     Dim tmp As Variant
     
@@ -170,7 +170,7 @@ Public Function IsDateVal(src As Variant) As Boolean
     
     Exit Function
 
-ERR1:
+Err1:
     IsDateVal = False
 
 End Function
@@ -180,7 +180,7 @@ End Function
 ' -----------------------------------------------------------------
 Public Function CnvDateVal(src As Variant) As Variant
 
-    On Error GoTo ERR1
+    On Error GoTo Err1
 
     Dim rst As Variant
     
@@ -197,7 +197,7 @@ Public Function CnvDateVal(src As Variant) As Variant
     End If
     
     
-ERR1:
+Err1:
     CnvDateVal = rst
 
 End Function
@@ -583,6 +583,128 @@ Err1:
     ' エラー = 検索結果なし
     
 End Function
+
+' -----------------------------------------------------------------
+' UTF8書き出し TAB区切り
+' -----------------------------------------------------------------
+Public Sub Outf8(sh As Worksheet, outfile As String)
+
+    ' StreamTypeEnum
+    Const adTypeBinary = 1
+    Const adTypeText = 2
+    
+    ' LineSeparatorsEnum
+    Const adCR = 13
+    Const adCRLF = -1
+    Const adLF = 10
+    
+    ' StreamWriteEnum
+    Const adWriteChar = 0
+    Const adWriteLine = 1
+    
+    ' SaveOptionsEnum
+    Const adSaveCreateNotExist = 1
+    Const adSaveCreateOverWrite = 2
+    
+    
+    Dim fname As String
+    Dim lastRow As Long
+    Dim lastCol As Long
+    Dim line As String
+    Dim fso As Object
+    Dim strm As Object
+    Dim r As Long
+    Dim c As Long
+    
+    Const START_ROW As Long = 1
+    Const START_COL As Long = 1
+    
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set strm = CreateObject("ADODB.Stream")
+    
+    With sh.UsedRange
+        lastRow = .Rows(.Rows.Count).row
+        lastCol = .Columns(.Columns.Count).Column
+    End With
+    
+    ' 出力ファイルセット
+    fname = sh.Parent.path & "\" & outfile
+    
+    If fso.FileExists(fname) Then
+        fso.DeleteFile fname
+    End If
+    
+    With strm
+        .Charset = "UTF-8"
+        .LineSeparator = adLF
+        .Open
+    End With
+    
+    For r = START_ROW To lastRow
+        
+        line = ""
+        
+        For c = START_COL To lastCol
+            line = line & RmvCRLF(sh.Cells(r, c).Value)
+            If c < lastCol Then line = line & vbTab
+        Next
+        
+        strm.WriteText line, adWriteLine
+    
+Next_Line:
+    Next
+
+    ' BOM除去 & 保存
+    With strm
+        .Position = 0           ' ストリームの位置を0にする
+        .Type = adTypeBinary    ' データの種類をバイナリデータに変更
+        .Position = 3           ' ストリームの位置を3にする
+    
+        Dim byteData() As Byte  ' 一時格納用
+        byteData = .Read        ' ストリームの内容を一時格納用変数に保存
+        .Close                  ' 一旦ストリームを閉じる（リセット）
+    
+        .Open                   ' ストリームを開く
+        .Write byteData         ' ストリームに一時格納したデータを流し込む
+        
+        .SaveToFile fname, adSaveCreateOverWrite
+        .Close
+    End With
+   
+    MsgBox "データ書き出し終了"
+
+End Sub
+
+' -----------------------------------------------------------------
+' Set fso = CreateObject("Scripting.FileSystemObject")
+' -----------------------------------------------------------------
+' プロパティ
+' Drives                システムに接続されたDrivesコレクションを返します
+' メソッド
+' BuildPath             パスの末尾に、指定したフォルダ名を追加したパスを返します
+' CopyFile              ファイルをコピーします
+' CopyFolder            フォルダをコピーします
+' CreateFolder          新しいフォルダを作成します
+' CreateTextFile        新しいテキストファイルを作成します
+' DeleteFile            ファイルを削除します
+' DeleteFolder          フォルダを削除します
+' DriveExists           ドライブが存在するかどうか調べます
+' FileExists            ファイルが存在するかどうか調べます
+' FolderExists          フォルダが存在するかどうか調べます
+' GetAbsolutePathName   省略したパスから完全なパス名を返します
+' GetBaseName           拡張子を除いたファイルのベース名を返します
+' GetDrive              指定したDriveオブジェクトを返します
+' GetDriveName          指定したドライブの名前を返します
+' GetExtensionName      ファイルの拡張子を返します
+' GetFile               指定したFileオブジェクトを返します
+' GetFileName           指定したファイルの名前を返します
+' GetFolder             指定したFolderオブジェクトを返します
+' GetParentFolderName   指定したフォルダの親フォルダを返します
+' GetSpecialFolder      システムが使用する特別なフォルダのパスを返します
+' GetTempName           一時的なファイル名を生成します
+' MoveFile              ファイルを移動します
+' MoveFolder            フォルダを移動します
+' OpenTextFile          指定したTextStreamオブジェクトを返します
 
 ' -----------------------------------------------------------------
 ' 初期化
