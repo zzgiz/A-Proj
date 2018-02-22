@@ -7,6 +7,10 @@
 # 2.データ取得
 # 3.S3転送
 # 4.Redshift投入
+#
+# ※動作に必要なファイル
+#   makeSql.sql
+#   makePartList.sql
 
 source /home/user1/.bash_profile 1>/dev/null
 
@@ -24,8 +28,8 @@ function exit_func() {
   [ "${cnt}" = "" ] && cnt="null"
   [ ${sts} -eq 0 ] && errmsg=""
 
-  psql -h XXXXX.redshift.amazonaws.com -U db_user1 -d db_name1 -p 1234 -c \
-    "insert into ログテーブル values ('${TYP}','${SCHEMA}', '${TBL}', '${START_TIME}', '$(date '+%Y-%m-%d %H:%M:%S')', ${cnt}, '${sts}', '${errmsg}')" \
+  psql -h XXXX.redshift.amazonaws.com -U XXXX -d XXXX -p XXXX -c \
+    "insert into schema_a.batch_log values ('${TYP}','${SCHEMA}', '${TBL}', '${START_TIME}', '$(date '+%Y-%m-%d %H:%M:%S')', ${cnt}, '${sts}', '${errmsg}')" \
     1>/dev/null 2>>${MAIN_LOG}
 
   exit ${sts}
@@ -65,11 +69,53 @@ function send_s3() {
   return 0
 }
 
+function import_data() {
+  # Redshiftに投入
+
+  # テーブル存在チェック
+  TBL_LW=`echo ${TBL} | tr [A-Z] [a-z]`
+  ret=`psql -h XXXX.redshift.amazonaws.com -U XXXX -d XXXX -p XXXX -c \
+    "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='"${SCHEMA}"' AND table_name='"${TBL_LW}"';"` 1>/dev/null 2>>${MAIN_LOG}
+  if [ `echo ${ret} | cut -d' ' -f3` -eq 0 ]; then
+    exit_func 0 "テーブル未定義。S3保存で終了"
+  fi
+  
+  # TRUNCATE
+  psql -h XXXX.redshift.amazonaws.com -U XXXX -d XXXX -p XXXX -c \
+    "truncate table ${SCHEMA}.${TBL};" 1>/dev/null 2>>${MAIN_LOG}
+  ret=$?
+  if [ ${ret} -gt 0 ]; then
+    exit_func 1 "ERROR : TRUNCATEエラー"
+  fi
+  
+  # 投入
+  [ -z ${CSV_FILE} ] && CSV_FILE=${TBL}
+  psql -h XXXX.redshift.amazonaws.com -U XXXX -d XXXX -p XXXX -c \
+    "copy ${SCHEMA}.${TBL} from '${S3PATH}/${DAY_DT}/${CSV_FILE}' \
+       CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX' \
+       GZIP CSV IGNOREHEADER 1 DELIMITER ',' DATEFORMAT 'auto';" 
+    1>/dev/null 2>>${MAIN_LOG}
+  ret=$?
+  if [ ${ret} -gt 0 ]; then
+    exit_func 1 "ERROR : Redshift投入エラー"
+  fi
+
+  # テーブル件数取得
+  ret=`psql -h XXXX.redshift.amazonaws.com -U XXXX -d XXXX -p XXXX -c \
+    'SELECT COUNT(*) FROM '${SCHEMA}'.'${TBL_LW}';'` 1>/dev/null 2>>${MAIN_LOG}
+  TBL_CNT=`echo ${ret} | cut -d' ' -f3`
+
+  exit_func 0 "Succeeded! ---------" ${TBL_CNT}
+}
+
+#-----------------------------------------------------------------
+# Batch start
+
 if [ ${#} -lt 1 ]; then
   echo "  例) Oracleからデータを取得しRedshiftに投入"
-  echo "    sh ./ora2red.sh KIND1 TABLE_1 3 s list 1"
+  echo "    sh ./ora2red.sh SYSA TBL_A 3 s list 1"
   echo ""
-  echo "  第1パラメータ: KIND1, KIND2 から選択"
+  echo "  第1パラメータ: SYSA... から選択"
   echo "  第2パラメータ: テーブル名"
   echo "  第3パラメータ: 1:SQL作成, 2:データ取得, 3:S3転送, 4:Redshift投入まで, 5:Redshift投入のみ実施 (省略時=4)"
   echo "  第4パラメータ: p:Partition, s:SubPartition データ取得方法 (省略時=一括取得。パーティション別取得無し)"
@@ -113,27 +159,41 @@ else
   PART_LIST=""
 fi
 
-if [ ${TYP} = 'KIND1' ]; then
-  ORA_USR="user1"
-  ORA_PAS="pass1"
-  ORA_HST="host or IP address"
-  S3PATH="s3://s3_path1"
-  SCHEMA="schema1"
+if [ ${TYP} = 'SYSA' ]; then
+  # SYS_A
+  ORA_USR="user"
+  ORA_PAS="pass"
+  ORA_HST="host"
+  S3PATH="path"
+  SCHEMA="schema"
 
-elif [ ${TYP} = 'KIND2' ]; then
-  ORA_USR="user2"
-  ORA_PAS="pass2"
-  ORA_HST="host or IP address"
-  S3PATH="s3://s3_path2"
-  SCHEMA="schema2"
+elif [ ${TYP} = 'SYSB' ]; then
+  # SYS_B
+  ORA_USR="user"
+  ORA_PAS="pass"
+  ORA_HST="host"
+  S3PATH="path"
+  SCHEMA="schema"
+
+elif [ ${TYP} = 'SYSC' ]; then
+  # SYS_C
+  ORA_USR="user"
+  ORA_PAS="pass"
+  ORA_HST="host"
+  S3PATH="path"
+  SCHEMA="schema"
 
 else
-  echo "第1パラメータは KIND1, KIND2 から選択"
+  echo "第1パラメータは SYSA... から選択"
   exit 0
 fi
 
 log "Start! -------------"
 START_TIME=$(date -u -d '9 hours' '+%Y-%m-%d %H:%M:%S')
+
+## csv過去データ削除
+[ ! -e ./csv ] && mkdir csv 
+find ./csv -type d -mtime +15 -print | xargs -r rm -rf
 
 ## 1.SQL作成
 if [ ${PROC_END} -le 4 ]; then
@@ -153,6 +213,7 @@ if [ ${PROC_END} -le 4 ]; then
     CSV_FILE="${CSV_FILE}_&1..csv"
   fi
 
+  [ ! -e ./sql ] && mkdir sql
   sqlret=`sqlplus -s ${ORA_USR}/${ORA_PAS}@${ORA_HST} @./makeSql.sql ${TBL} ${DAY_DT} ${SQL_FILE} ${CSV_FILE} ${PART_TYPE}`
   ret=$?
   if [ `echo ${#sqlret}` -gt 0 ]; then
@@ -251,42 +312,8 @@ fi
 ## 4.Redshiftに投入
 if [ ${PROC_END} -ge 4 ]; then
 
-  # テーブル存在チェック
-  TBL_LW=`echo ${TBL} | tr [A-Z] [a-z]`
-  ret=`psql -h XXXXX.redshift.amazonaws.com -U db_user1 -d db_name1 -p 1234 -c \
-    "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='"${SCHEMA}"' AND table_name='"${TBL_LW}"';"` 1>/dev/null 2>>${MAIN_LOG}
-  if [ `echo ${ret} | cut -d' ' -f3` -eq 0 ]; then
-    exit_func 0 "テーブル未定義。S3保存で終了"
-  fi
-  
-  # TRUNCATE
-  psql -h XXXXX.redshift.amazonaws.com -U db_user1 -d db_name1 -p 1234 -c \
-    "truncate table ${SCHEMA}.${TBL};" 1>/dev/null 2>>${MAIN_LOG}
-  ret=$?
-  if [ ${ret} -gt 0 ]; then
-    exit_func 1 "ERROR : TRUNCATEエラー"
-  fi
-  
-  # 投入
-  [ -z ${CSV_FILE} ] && CSV_FILE=${TBL}
-  psql -h XXXXX.redshift.amazonaws.com -U db_user1 -d db_name1 -p 1234 -c \
-    "copy ${SCHEMA}.${TBL} from '${S3PATH}/${DAY_DT}/${CSV_FILE}' \
-       CREDENTIALS 'aws_access_key_id=XXXXX;aws_secret_access_key=XXXXX' \
-       GZIP CSV IGNOREHEADER 1 DELIMITER ',' DATEFORMAT 'auto';" 
-    1>/dev/null 2>>${MAIN_LOG}
-  ret=$?
-  if [ ${ret} -gt 0 ]; then
-    exit_func 1 "ERROR : Redshift投入エラー"
-  fi
+  import_data &
 
-  # テーブル件数取得
-  ret=`psql -h XXXXX.redshift.amazonaws.com -U db_user1 -d db_name1 -p 1234 -c \
-    'SELECT COUNT(*) FROM '${SCHEMA}'.'${TBL_LW}';'` 1>/dev/null 2>>${MAIN_LOG}
-  TBL_CNT=`echo ${ret} | cut -d' ' -f3`
 fi
 
-## csv過去データ削除
-find ./csv -type d -mtime +15 -print | xargs -r rm -rf
-
-exit_func 0 "Succeeded! ---------" ${TBL_CNT}
 
